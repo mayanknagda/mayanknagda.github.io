@@ -35,7 +35,7 @@ Listed Below are some of my project works-
 
 ### Project #6
 - Name: SRM NRC Booking Portal (http://nrc.srmonline.net/)
-- Details: A e-Commerce Facility for SRM MBA Department.
+- Details: An instrument booking facility for SRM Nanotechnology Research Centre.
 - Duration: 2 Month
 
 ### Project #7
