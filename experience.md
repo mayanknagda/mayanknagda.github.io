@@ -1,7 +1,7 @@
 ---
 layout: page
 title: My Experiences 
-subtitle: See mom, I rocked
+subtitle: Work Experiences
 ---
 
 Hi below mentioned are some of my work experiences-
