@@ -1,7 +1,7 @@
 ---
 layout: page
 title: My Publications
-subtitle: Research publications!
+subtitle: Research Publications!
 ---
 Hi!
 Listed Below are some of my publications-
