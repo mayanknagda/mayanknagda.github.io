@@ -14,7 +14,7 @@ Listed Below are some of my project works-
 - Team Size: 3
 
 ### Project #2
-- Name: SRM Central Instrumentation Facility (http://www.srmscif.in/)
+- Name: SRM Central Instrumentation Facility (http://scif.srmonline.net/)
 - Details: A central booking system for slot booking of Instruments.
 - Duration: 1 Month
 
@@ -29,29 +29,34 @@ Listed Below are some of my project works-
 - Duration: 2 Month
 
 ### Project #5
-- Name: SRM eBazaar
+- Name: SRM eBazaar (http://ebazaar.srmuniv.edu.in/)
 - Details: A e-Commerce Facility for SRM MBA Department.
-- Status: Ongoing
+- Duration: 2 Month
 
 ### Project #6
+- Name: SRM NRC Booking Portal (http://nrc.srmonline.net/)
+- Details: A e-Commerce Facility for SRM MBA Department.
+- Duration: 2 Month
+
+### Project #7
 - Name: Property Rate Prediction
 - Details: A Universal Property Prediction Model by Improving Linear Regression
 - Duration: 5 Months
-- Publication: Predicting Property Prices: A Universal Model
 
-### Project #7
+### Project #8
 - Name: Vision Picking: A MVOC Realm 
 - Details: A patented Vision Picking system for warehouse management. 
 - Patent Details: Patent Submitted 
-- Publication: 2 Publications 
-- Status: Ongoing
-
-### Project #8
-- Name: Sentimental Analysis
-- Details: A chatbot to make a conversation (with mentally infirm people) using sentimental analysis
-- Status: Ongoing
 
 ### Project #9
+- Name: Sentimental Prediction
+- Details: Predicting polarity of sentiments from movie reviews.
+
+### Project #10
+- Name: Handwrittern Digit Recognition
+- Details: Recognising handwritten digits through LSTM-CNN DNN.
+
+### Project #11
 - Name: Simulation Software Tool for BARC in partnership with SRM IST
 - Details: A nuclear simulation software
 - Status: Ongoing (3yr govt. Project)
