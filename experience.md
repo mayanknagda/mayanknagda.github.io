@@ -6,6 +6,9 @@ subtitle: See mom, I rocked
 
 Hi below mentioned are some of my work experiences-
 
+### Founder at Centre for Data Driven Automation Technologies and Systems (CDATS)
+- Detail: A small group of highly driven students working towards automation
+
 ### Internship from Darte’Web(Summer, 2017)
 - Domain: e-commerce website project
 
