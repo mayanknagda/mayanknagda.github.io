@@ -1,0 +1,125 @@
+{
+  "publications": [
+    {
+      "id": "aligning-neural-topic-models-2025",
+      "title": "Aligning Neural Topic Models with Labels and Authors",
+      "authors": [
+        "Mayank Nagda"
+      ],
+      "venue": "North American Chapter of the Association for Computational Linguistics (NAACL)",
+      "year": 2025,
+      "type": "Conference",
+      "tags": [
+        "Topic Modelling",
+        "LLMs",
+        "Alignment"
+      ],
+      "link": "https://aclanthology.org/2025.findings-naacl.44/",
+      "featured": true
+    },
+    {
+      "id": "putting-back-the-stops-2024",
+      "title": "Putting Back the Stops: Integrating Syntax with Neural Topic Models",
+      "authors": [
+        "Mayank Nagda"
+      ],
+      "venue": "International Joint Conference on Artificial Intelligence (IJCAI)",
+      "year": 2024,
+      "type": "Conference",
+      "tags": [
+        "Topic Modelling",
+        "Syntax",
+        "Retrieval"
+      ],
+      "link": "https://www.ijcai.org/proceedings/2024/0710.pdf",
+      "featured": true
+    },
+    {
+      "id": "evaluating-dynamic-topic-models-2024",
+      "title": "Evaluating Dynamic Topic Models",
+      "authors": [
+        "*Charu Karakkaparambil James",
+        "*Mayank Nagda",
+        "Nooshin Haji Ghassemi",
+        "Marius Kloft",
+        "Sophie Fellenz"
+      ],
+      "venue": "Association for Computational Linguistics (ACL)",
+      "year": 2024,
+      "type": "Conference",
+      "tags": [
+        "Evaluation",
+        "Topic Modelling"
+      ],
+      "link": "https://aclanthology.org/2024.acl-long.11/",
+      "featured": true
+    },
+    {
+      "id": "text-style-transfer-eval-2024",
+      "title": "Text Style Transfer Evaluation Using Large Language Models",
+      "authors": [
+        "Phil Ostheimer",
+        "Mayank Nagda",
+        "Marius Kloft",
+        "Sophie Fellenz"
+      ],
+      "venue": "International Conference on Computational Linguistics (COLING)",
+      "year": 2024,
+      "type": "Conference",
+      "tags": [
+        "Evaluation",
+        "Text Generation",
+        "LLMs"
+      ],
+      "link": "https://aclanthology.org/2024.lrec-main.1373/",
+      "featured": true
+    },
+    {
+      "id": "piano-2025",
+      "title": "PIANO: Physics-Informed Autoregressive Network",
+      "authors": [
+        "Mayank Nagda"
+      ],
+      "venue": "Preprint",
+      "year": 2025,
+      "type": "Preprint",
+      "tags": [
+        "Physics-aware ML",
+        "Time Series"
+      ],
+      "link": ""
+    },
+    {
+      "id": "setpinns-2025",
+      "title": "SetPINNs: Set-based Physics-Informed Neural Networks",
+      "authors": [
+        "Mayank Nagda"
+      ],
+      "venue": "Preprint",
+      "year": 2025,
+      "type": "Preprint",
+      "tags": [
+        "Physics-aware ML",
+        "Simulation"
+      ],
+      "link": ""
+    },
+    {
+      "id": "ts-style-transfer-2025",
+      "title": "Time Series Style Transfer using Diffusion Models",
+      "authors": [
+        "Mayank Nagda"
+      ],
+      "venue": "Under Review",
+      "year": 2025,
+      "type": "Conference",
+      "tags": [
+        "Diffusion",
+        "Time Series",
+        "Generative AI"
+      ],
+      "link": "",
+      "featured": true
+    }
+  ]
+}

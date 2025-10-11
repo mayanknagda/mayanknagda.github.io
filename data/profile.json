@@ -1,0 +1,220 @@
+{
+  "name": "Mayank Nagda",
+  "tagline": "PhD in Generative AI | AI Researcher & Engineer",
+  "hero": {
+    "pretitle": "Generative AI · Retrieval · Applied Research",
+    "title": "Building reliable generative AI systems from research to production",
+    "summary": "PhD candidate in Generative AI. I bridge foundational research, large-scale retrieval, and trustworthy generative modelling to solve high-impact problems.",
+    "meta": [
+      {
+        "label": "Kaiserslautern, Germany"
+      },
+      {
+        "label": "nagdamayank05@gmail.com",
+        "display": "Email Mayank",
+        "url": "mailto:nagdamayank05@gmail.com"
+      },
+      {
+        "label": "mayanknagda.github.io",
+        "url": "https://mayanknagda.github.io",
+        "external": true
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/mayanknagda",
+        "external": true
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/mayanknagda",
+        "external": true
+      }
+    ],
+    "actions": [
+      {
+        "label": "Get in touch",
+        "url": "mailto:nagdamayank05@gmail.com",
+        "primary": true
+      },
+      {
+        "label": "View portfolio",
+        "url": "projects.html"
+      },
+      {
+        "label": "Browse publications",
+        "url": "publications.html"
+      }
+    ]
+  },
+  "sections": {
+    "experience": "I lead cross-functional AI initiatives that blend generative modelling, retrieval, and production engineering to help teams deliver measurable impact.",
+    "projects": "Research and engineering programs that demonstrate how I operationalize LLMs, diffusion models, and physics-aware ML for discovery, simulation, and evaluation.",
+    "education": "Graduate training focused on machine learning, generative modelling, and building software systems that scale.",
+    "publications": "Representative publications covering generative AI, topic modelling, and evaluation frameworks.",
+    "skills": "A condensed view of the leadership, ML, and systems capabilities I bring to collaborative research and product teams."
+  },
+  "experience": [
+    {
+      "role": "AI Researcher & Engineer",
+      "organization": "TU Kaiserslautern",
+      "type": "Full Time",
+      "location": "Kaiserslautern, Germany",
+      "start": "Nov 2022",
+      "end": "Present",
+      "skills": [
+        "NLP",
+        "LLMs",
+        "RAG",
+        "Diffusion Models",
+        "Time Series"
+      ],
+      "highlights": [
+        "Led generative AI programs that combined LLMs and diffusion models for NLP and time-series applications, creating new approaches for data generation and large-scale retrieval.",
+        "Built search, discovery, and recommendation systems operating across millions of documents, aligning results with metadata, LLM agents, and human feedback.",
+        "Engineered production-grade pipelines that transitioned prototypes into scalable systems, reducing simulation costs and accelerating experimentation with cross-functional teams.",
+        "Mentored researchers and engineers while supporting hiring and talent development across the AI group."
+      ]
+    },
+    {
+      "role": "Machine Learning Engineer",
+      "organization": "Vision Impulse GmbH",
+      "type": "Part Time",
+      "location": "Kaiserslautern, Germany",
+      "start": "Feb 2022",
+      "end": "Sep 2022",
+      "skills": [
+        "Regression",
+        "Anomaly Detection",
+        "Computer Vision",
+        "Time Series"
+      ],
+      "highlights": [
+        "Improved crop-yield forecasting accuracy by 20% for satellite geospatial analytics with advanced time-series models.",
+        "Developed and deployed anomaly detection models that flag dried trees, reducing wildfire risk across Europe and South America.",
+        "Delivered robust data pipelines with monitoring and iterative model updates tailored to stakeholder workflows."
+      ]
+    },
+    {
+      "role": "Machine Learning Research Assistant",
+      "organization": "TU Kaiserslautern",
+      "type": "Part Time",
+      "location": "Kaiserslautern, Germany",
+      "start": "Mar 2021",
+      "end": "Oct 2022",
+      "skills": [
+        "Experiment Design",
+        "NLP",
+        "Time Series",
+        "Computer Vision"
+      ],
+      "highlights": [
+        "Implemented and evaluated algorithms across NLP, time-series analysis, and computer vision.",
+        "Drove experiment design, ablations, result validation, and paper writing for multiple research efforts."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "PhD in Computer Science",
+      "institution": "TU Kaiserslautern",
+      "location": "Germany",
+      "start": "2022",
+      "end": "2025 (expected)",
+      "focus": [
+        "Generative AI",
+        "Machine Learning"
+      ],
+      "highlights": [
+        "Dissertation: Deep Learning with Structured Inductive Biases and Domain Constraints."
+      ]
+    },
+    {
+      "degree": "M.Sc. in Computer Science",
+      "institution": "TU Kaiserslautern",
+      "location": "Germany",
+      "start": "2020",
+      "end": "2022",
+      "focus": [
+        "Intelligent Systems",
+        "Software Engineering"
+      ],
+      "highlights": [
+        "Coursework: Machine Learning, Deep Learning, Data Science, Software Management."
+      ]
+    }
+  ],
+  "pages": {
+    "projects": {
+      "pretitle": "Project Portfolio",
+      "title": "AI systems and generative modelling programs",
+      "summary": "A closer look at how I combine LLMs, diffusion models, retrieval, and physics-aware ML to deliver measurable outcomes for research and industry partners.",
+      "intro": "Each project advances generative AI reliability, large-scale retrieval, or modeling for critical domains. Many began as research collaborations and matured into production-grade systems.",
+      "actions": [
+        {
+          "label": "Discuss a collaboration",
+          "url": "mailto:nagdamayank05@gmail.com"
+        }
+      ]
+    },
+    "publications": {
+      "pretitle": "Research Library",
+      "title": "Peer-reviewed and in-progress publications",
+      "summary": "Work spanning generative modeling, topic modelling, anomaly detection, and trustworthy evaluation—published at venues such as ACL, IJCAI, and COLING.",
+      "intro": "Browse representative papers and preprints. Links point to the best available version (conference, arXiv, or publisher).",
+      "actions": [
+        {
+          "label": "View Google Scholar",
+          "url": "https://scholar.google.com/scholar?q=Mayank+Nagda",
+          "external": true
+        }
+      ]
+    }
+  },
+  "skills": [
+    {
+      "category": "Leadership & Strategy",
+      "items": [
+        "Team leadership and mentoring",
+        "Recruitment and talent development",
+        "Program management & Agile delivery"
+      ]
+    },
+    {
+      "category": "Machine Learning & AI",
+      "items": [
+        "Generative AI (LLMs, diffusion)",
+        "Search & information retrieval",
+        "Time-series modelling and vision"
+      ]
+    },
+    {
+      "category": "Systems & Infrastructure",
+      "items": [
+        "MLOps, CI/CD, observability",
+        "Cloud platforms: AWS, Azure, GCP",
+        "CUDA and GPU acceleration"
+      ]
+    },
+    {
+      "category": "Languages & Tools",
+      "items": [
+        "Python, PyTorch, SQL",
+        "C/C++, Docker, Git",
+        "Prompt engineering & RAG frameworks"
+      ]
+    }
+  ],
+  "social": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/mayanknagda"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/mayanknagda"
+    }
+  ],
+  "footer": {
+    "note": "Let’s collaborate on research, enterprise AI systems, or evaluation frameworks."
+  }
+}
