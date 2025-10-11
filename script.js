@@ -15,6 +15,10 @@ const elements = {
   heroSummary: document.getElementById("hero-summary"),
   heroMeta: document.getElementById("hero-meta"),
   heroActions: document.getElementById("hero-actions"),
+  heroMedia: document.getElementById("hero-media"),
+  heroSection: document.getElementById("hero"),
+  newsIntro: document.getElementById("news-intro"),
+  newsList: document.getElementById("news-list"),
   experienceIntro: document.getElementById("experience-intro"),
   experienceList: document.getElementById("experience-list"),
   projectsIntro: document.getElementById("projects-intro"),
@@ -75,6 +79,7 @@ async function loadHomePage() {
     document.title = `${profile.name ?? "Portfolio"} | ${profile.tagline ?? "Generative AI"}`;
     applyBrand(profile);
     renderHeroSection(profile);
+    renderNews(profile);
     renderExperience(profile);
     renderEducation(profile);
     renderSkills(profile);
@@ -150,6 +155,73 @@ function renderHeroSection(profile) {
   }
 
   renderActions(elements.heroActions, hero.actions);
+
+  if (elements.heroMedia) {
+    elements.heroMedia.innerHTML = "";
+    if (hero.image?.src) {
+      const picture = document.createElement("picture");
+      const img = document.createElement("img");
+      img.src = hero.image.src;
+      img.alt = hero.image.alt ?? `${profile.name ?? "Profile"} portrait`;
+      img.loading = "lazy";
+      img.decoding = "async";
+      picture.appendChild(img);
+      elements.heroMedia.appendChild(picture);
+      elements.heroMedia.removeAttribute("aria-hidden");
+      elements.heroSection?.classList.add("hero--has-media");
+    } else {
+      elements.heroMedia.setAttribute("aria-hidden", "true");
+      elements.heroSection?.classList.remove("hero--has-media");
+    }
+  }
+}
+
+function renderNews(profile) {
+  if (!elements.newsList) return;
+  setText(elements.newsIntro, profile.sections?.news);
+  elements.newsList.innerHTML = "";
+
+  const newsItems = safeArray(profile.news);
+  if (!newsItems.length) {
+    elements.newsList.innerHTML = "<p>No recent updates yet.</p>";
+    return;
+  }
+
+  newsItems.slice(0, 6).forEach((item) => {
+    const article = document.createElement("article");
+    article.className = "news-item";
+
+    if (item.date) {
+      const date = document.createElement("p");
+      date.className = "news-item__date";
+      date.textContent = item.date;
+      article.appendChild(date);
+    }
+
+    const title = document.createElement("h3");
+    title.className = "news-item__title";
+    title.textContent = item.title ?? "Update";
+    article.appendChild(title);
+
+    if (item.description) {
+      const desc = document.createElement("p");
+      desc.className = "news-item__description";
+      desc.textContent = item.description;
+      article.appendChild(desc);
+    }
+
+    if (item.link) {
+      const link = document.createElement("a");
+      link.className = "news-item__link bounce-link";
+      link.href = item.link;
+      link.textContent = "Read more";
+      link.target = "_blank";
+      link.rel = "noopener";
+      article.appendChild(link);
+    }
+
+    elements.newsList.appendChild(article);
+  });
 }
 
 function renderExperience(profile) {

@@ -5,6 +5,10 @@
     "pretitle": "Generative AI · Retrieval · Applied Research",
     "title": "Building reliable generative AI systems from research to production",
     "summary": "PhD candidate in Generative AI. I bridge foundational research, large-scale retrieval, and trustworthy generative modelling to solve high-impact problems.",
+    "image": {
+      "src": "data/myphoto.jpeg",
+      "alt": "Portrait of Mayank Nagda"
+    },
     "meta": [
       {
         "label": "Kaiserslautern, Germany"
@@ -47,12 +51,26 @@
     ]
   },
   "sections": {
+    "news": "Updates on job, publications, talks, and milestones from my research and applied AI work.",
     "experience": "I lead cross-functional AI initiatives that blend generative modelling, retrieval, and production engineering to help teams deliver measurable impact.",
     "projects": "Research and engineering programs that demonstrate how I operationalize LLMs, diffusion models, and physics-aware ML for discovery, simulation, and evaluation.",
     "education": "Graduate training focused on machine learning, generative modelling, and building software systems that scale.",
     "publications": "Representative publications covering generative AI, topic modelling, and evaluation frameworks.",
     "skills": "A condensed view of the leadership, ML, and systems capabilities I bring to collaborative research and product teams."
   },
+  "news": [
+    {
+      "title": "Talk at ECML-PKDD 2025",
+      "date": "Aug 2025",
+      "description": "Our latest work on diffusion-based time series style transfer will be presented at SynDAiTE workshop in ECML-PKDD 2025.",
+      "link": "https://aiimlab.org/events/ECML_PKDD_2025_SynDAiTE_Synthetic_Data_for_AI_Trustworthiness_and_Evolution"
+    },
+    {
+      "title": "Presenting at NAACL 2025",
+      "date": "Jan 2025",
+      "description": "Preparing to present research on aligning neural topic models with author- and label-aware priors."
+    }
+  ],
   "experience": [
     {
       "role": "AI Researcher & Engineer",
