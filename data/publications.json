@@ -78,7 +78,7 @@
       "id": "piano-2025",
       "title": "PIANO: Physics-Informed Autoregressive Network",
       "authors": [
-        "Mayank Nagda"
+        "Mayank Nagda", "Jephte Abijuru", "Phil Ostheimer", "Marius Kloft", "Sophie Fellenz"
       ],
       "venue": "Preprint",
       "year": 2025,
@@ -87,13 +87,13 @@
         "Physics-aware ML",
         "Time Series"
       ],
-      "link": ""
+      "link": "https://arxiv.org/abs/2508.16235"
     },
     {
       "id": "setpinns-2025",
       "title": "SetPINNs: Set-based Physics-Informed Neural Networks",
       "authors": [
-        "Mayank Nagda"
+        "Mayank Nagda", "Phil Ostheimer", "Thomas Specht", "Frank Rhein", "Fabian Jirasek", "Stephan Mandt", "Marius Kloft", "Sophie Fellenz"
       ],
       "venue": "Preprint",
       "year": 2025,
@@ -102,13 +102,13 @@
         "Physics-aware ML",
         "Simulation"
       ],
-      "link": ""
+      "link": "https://arxiv.org/abs/2409.20206"
     },
     {
       "id": "ts-style-transfer-2025",
       "title": "Time Series Style Transfer using Diffusion Models",
       "authors": [
-        "Mayank Nagda"
+        "Mayank Nagda", "Phil Ostheimer", "Justus Arweiler", "Indra Jungjohann", "Jennifer Werner", "Dennis Wagner", "Aparna Muraleedharan", "Pouya Jafari", "Jochen Schmid", "Fabian Jirasek", "Jakob Burger", "Michael Bortz", "Hans Hasse", "Stephan Mandt", "Marius Kloft", "Sophie Fellenz"
       ],
       "venue": "Under Review",
       "year": 2025,
@@ -118,7 +118,7 @@
         "Time Series",
         "Generative AI"
       ],
-      "link": "",
+      "link": "https://arxiv.org/abs/2510.11335v1",
       "featured": true
     }
   ]

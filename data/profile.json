@@ -137,7 +137,7 @@
       "institution": "TU Kaiserslautern",
       "location": "Germany",
       "start": "2022",
-      "end": "2025 (expected)",
+      "end": "Early 2026 (expected)",
       "focus": [
         "Generative AI",
         "Machine Learning"
@@ -177,12 +177,12 @@
     "publications": {
       "pretitle": "Research Library",
       "title": "Peer-reviewed and in-progress publications",
-      "summary": "Work spanning generative modeling, topic modelling, anomaly detection, and trustworthy evaluation—published at venues such as ACL, IJCAI, and COLING.",
+      "summary": "Work spanning generative modeling, topic modelling, physics-informed neural networks, and trustworthy evaluation.",
       "intro": "Browse representative papers and preprints. Links point to the best available version (conference, arXiv, or publisher).",
       "actions": [
         {
           "label": "View Google Scholar",
-          "url": "https://scholar.google.com/scholar?q=Mayank+Nagda",
+          "url": "https://scholar.google.com/citations?user=-3n5lpYAAAAJ&hl=en",
           "external": true
         }
       ]
@@ -201,8 +201,9 @@
       "category": "Machine Learning & AI",
       "items": [
         "Generative AI (LLMs, diffusion)",
-        "Search & information retrieval",
-        "Time-series modelling and vision"
+        "Industrial AI & physics-aware ML",
+        "Alignment & information retrieval",
+        "NLP, Time Series, and Vision"
       ]
     },
     {

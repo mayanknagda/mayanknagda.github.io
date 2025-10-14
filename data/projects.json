@@ -31,8 +31,8 @@
     {
       "id": "generative-simulation",
       "name": "Generative AI for Simulation & Alignment",
-      "timeline": "2022 – Present",
-      "role": "Research lead",
+      "timeline": "2024 – Present",
+      "role": "Lead researcher & engineer",
       "summary": "Designed diffusion, transformer, and evaluator stacks that generate realistic time-series scenarios for anomaly detection, forecasting, and what-if analysis.",
       "highlights": [
         "Delivered 20% gains in enterprise search relevance by coupling LLM-guided retrieval with on-the-fly generation of topical summaries.",
@@ -59,8 +59,8 @@
     {
       "id": "industrial-ai",
       "name": "Reliable Industrial AI",
-      "timeline": "2021 – Present",
-      "role": "Applied AI engineer",
+      "timeline": "2024 – Present",
+      "role": "Researcher & Applied AI engineer",
       "summary": "Integrated scientific priors into ML systems to maintain reliability for safety-critical simulations in chemical engineering, energy, and structural analysis.",
       "highlights": [
         "Embedded physics and domain constraints into neural architectures to guarantee compliance with safety envelopes.",
@@ -78,8 +78,8 @@
     {
       "id": "evaluation-trust",
       "name": "Evaluation & Trust in AI Systems",
-      "timeline": "2020 – Present",
-      "role": "Researcher",
+      "timeline": "2023 – Present",
+      "role": "Applied AI Engineer",
       "summary": "Operationalised large-scale human and LLM-based evaluation pipelines to benchmark generative models and retrieval systems.",
       "highlights": [
         "Ran multi-annotator studies to stress-test automatic metrics and measure correlation with expert judgements.",
@@ -95,7 +95,7 @@
     {
       "id": "production-platforms",
       "name": "Production Systems at Scale",
-      "timeline": "Ongoing",
+      "timeline": "2017 - Ongoing",
       "role": "Tech lead",
       "summary": "Scaled research prototypes into cloud-native products, including booking platforms, experimentation portals, and marketplace systems used across the university.",
       "highlights": [
