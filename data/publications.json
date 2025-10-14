@@ -4,7 +4,7 @@
       "id": "aligning-neural-topic-models-2025",
       "title": "Aligning Neural Topic Models with Labels and Authors",
       "authors": [
-        "Mayank Nagda"
+        "Mayank Nagda", "Phil Ostheimer", "Sophie Fellenz"
       ],
       "venue": "North American Chapter of the Association for Computational Linguistics (NAACL)",
       "year": 2025,
@@ -21,7 +21,7 @@
       "id": "putting-back-the-stops-2024",
       "title": "Putting Back the Stops: Integrating Syntax with Neural Topic Models",
       "authors": [
-        "Mayank Nagda"
+        "Mayank Nagda", "Sophie Fellenz"
       ],
       "venue": "International Joint Conference on Artificial Intelligence (IJCAI)",
       "year": 2024,
@@ -75,6 +75,26 @@
       "featured": true
     },
     {
+      "id": "text-style-transfer-eval-call-2024",
+      "title": "A call for standardization and validation of text style transfer evaluation",
+      "authors": [
+        "Phil Ostheimer",
+        "Mayank Nagda",
+        "Marius Kloft",
+        "Sophie Fellenz"
+      ],
+      "venue": "Association for Computational Linguistics (ACL)",
+      "year": 2023,
+      "type": "Conference",
+      "tags": [
+        "Evaluation",
+        "Text Generation",
+        "LLMs"
+      ],
+      "link": "https://aclanthology.org/2023.findings-acl.687/",
+      "featured": true
+    },
+    {
       "id": "piano-2025",
       "title": "PIANO: Physics-Informed Autoregressive Network",
       "authors": [
@@ -106,20 +126,19 @@
     },
     {
       "id": "ts-style-transfer-2025",
-      "title": "Time Series Style Transfer using Diffusion Models",
+      "title": "DiffStyleTS: Diffusion Model for Style Transfer in Time Series",
       "authors": [
         "Mayank Nagda", "Phil Ostheimer", "Justus Arweiler", "Indra Jungjohann", "Jennifer Werner", "Dennis Wagner", "Aparna Muraleedharan", "Pouya Jafari", "Jochen Schmid", "Fabian Jirasek", "Jakob Burger", "Michael Bortz", "Hans Hasse", "Stephan Mandt", "Marius Kloft", "Sophie Fellenz"
       ],
-      "venue": "Under Review",
+      "venue": "Preprint",
       "year": 2025,
-      "type": "Conference",
+      "type": "Preprint",
       "tags": [
         "Diffusion",
         "Time Series",
         "Generative AI"
       ],
-      "link": "https://arxiv.org/abs/2510.11335v1",
-      "featured": true
+      "link": "https://arxiv.org/abs/2510.11335v1"
     }
   ]
 }
