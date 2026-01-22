@@ -4,7 +4,9 @@
       "id": "aligning-neural-topic-models-2025",
       "title": "Aligning Neural Topic Models with Labels and Authors",
       "authors": [
-        "Mayank Nagda", "Phil Ostheimer", "Sophie Fellenz"
+        "Mayank Nagda",
+        "Phil Ostheimer",
+        "Sophie Fellenz"
       ],
       "venue": "North American Chapter of the Association for Computational Linguistics (NAACL)",
       "year": 2025,
@@ -21,7 +23,8 @@
       "id": "putting-back-the-stops-2024",
       "title": "Putting Back the Stops: Integrating Syntax with Neural Topic Models",
       "authors": [
-        "Mayank Nagda", "Sophie Fellenz"
+        "Mayank Nagda",
+        "Sophie Fellenz"
       ],
       "venue": "International Joint Conference on Artificial Intelligence (IJCAI)",
       "year": 2024,
@@ -98,7 +101,11 @@
       "id": "piano-2025",
       "title": "PIANO: Physics-Informed Autoregressive Network",
       "authors": [
-        "Mayank Nagda", "Jephte Abijuru", "Phil Ostheimer", "Marius Kloft", "Sophie Fellenz"
+        "Mayank Nagda",
+        "Jephte Abijuru",
+        "Phil Ostheimer",
+        "Marius Kloft",
+        "Sophie Fellenz"
       ],
       "venue": "Preprint",
       "year": 2025,
@@ -113,11 +120,18 @@
       "id": "setpinns-2025",
       "title": "SetPINNs: Set-based Physics-Informed Neural Networks",
       "authors": [
-        "Mayank Nagda", "Phil Ostheimer", "Thomas Specht", "Frank Rhein", "Fabian Jirasek", "Stephan Mandt", "Marius Kloft", "Sophie Fellenz"
+        "Mayank Nagda",
+        "Phil Ostheimer",
+        "Thomas Specht",
+        "Frank Rhein",
+        "Fabian Jirasek",
+        "Stephan Mandt",
+        "Marius Kloft",
+        "Sophie Fellenz"
       ],
-      "venue": "Preprint",
-      "year": 2025,
-      "type": "Preprint",
+      "venue": "AISTATS",
+      "year": 2026,
+      "type": "Conference",
       "tags": [
         "Physics-aware ML",
         "Simulation"
@@ -128,7 +142,22 @@
       "id": "ts-style-transfer-2025",
       "title": "DiffStyleTS: Diffusion Model for Style Transfer in Time Series",
       "authors": [
-        "Mayank Nagda", "Phil Ostheimer", "Justus Arweiler", "Indra Jungjohann", "Jennifer Werner", "Dennis Wagner", "Aparna Muraleedharan", "Pouya Jafari", "Jochen Schmid", "Fabian Jirasek", "Jakob Burger", "Michael Bortz", "Hans Hasse", "Stephan Mandt", "Marius Kloft", "Sophie Fellenz"
+        "Mayank Nagda",
+        "Phil Ostheimer",
+        "Justus Arweiler",
+        "Indra Jungjohann",
+        "Jennifer Werner",
+        "Dennis Wagner",
+        "Aparna Muraleedharan",
+        "Pouya Jafari",
+        "Jochen Schmid",
+        "Fabian Jirasek",
+        "Jakob Burger",
+        "Michael Bortz",
+        "Hans Hasse",
+        "Stephan Mandt",
+        "Marius Kloft",
+        "Sophie Fellenz"
       ],
       "venue": "Preprint",
       "year": 2025,

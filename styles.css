@@ -83,6 +83,15 @@ a:focus-visible {
   letter-spacing: 0.12em;
 }
 
+.section h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
 .bio {
   margin: 0;
   max-width: 68ch;
@@ -98,6 +107,11 @@ a:focus-visible {
 
 .item-list li {
   margin: 0;
+}
+
+.timeline-group {
+  display: grid;
+  gap: 0.6rem;
 }
 
 .timeline {
@@ -125,6 +139,12 @@ a:focus-visible {
 
 .timeline__detail {
   color: var(--text);
+}
+
+.section-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .footer {

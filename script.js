@@ -11,7 +11,8 @@ const elements = {
   name: document.getElementById("name"),
   meta: document.getElementById("meta"),
   newList: document.getElementById("new-list"),
-  timelineList: document.getElementById("timeline-list"),
+  timelineExperience: document.getElementById("timeline-experience"),
+  timelineEducation: document.getElementById("timeline-education"),
   bioText: document.getElementById("bio-text"),
   publicationsList: document.getElementById("publications-list"),
   projectsList: document.getElementById("projects-list"),
@@ -108,13 +109,15 @@ function renderNews(news) {
 }
 
 function renderTimeline(profile) {
-  if (!elements.timelineList) return;
-  elements.timelineList.innerHTML = "";
+  if (!elements.timelineExperience || !elements.timelineEducation) return;
+  elements.timelineExperience.innerHTML = "";
+  elements.timelineEducation.innerHTML = "";
 
-  const timeline = [];
+  const experience = [];
+  const education = [];
 
   (Array.isArray(profile.experience) ? profile.experience : []).forEach((item) => {
-    timeline.push({
+    experience.push({
       start: item.start,
       end: item.end,
       title: [item.role, item.organization].filter(Boolean).join(" — "),
@@ -123,7 +126,7 @@ function renderTimeline(profile) {
   });
 
   (Array.isArray(profile.education) ? profile.education : []).forEach((item) => {
-    timeline.push({
+    education.push({
       start: item.start,
       end: item.end,
       title: [item.degree, item.institution].filter(Boolean).join(" — "),
@@ -131,21 +134,8 @@ function renderTimeline(profile) {
     });
   });
 
-  timeline
-    .sort((a, b) => (parseDate(b.start) ?? 0) - (parseDate(a.start) ?? 0))
-    .forEach((item) => {
-      const li = document.createElement("li");
-      const date = document.createElement("div");
-      date.className = "timeline__date";
-      date.textContent = [item.start, item.end].filter(Boolean).join(" – ");
-
-      const detail = document.createElement("div");
-      detail.className = "timeline__detail";
-      detail.textContent = [item.title, item.meta].filter(Boolean).join(" · ");
-
-      li.append(date, detail);
-      elements.timelineList.appendChild(li);
-    });
+  renderTimelineList(elements.timelineExperience, experience);
+  renderTimelineList(elements.timelineEducation, education);
 }
 
 function renderBio(profile) {
@@ -157,7 +147,9 @@ function renderPublications(publicationsData) {
   if (!elements.publicationsList) return;
   elements.publicationsList.innerHTML = "";
   const publications = getPublicationsArray(publicationsData)
-    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+    .filter((pub) => pub.type !== "Preprint")
+    .sort((a, b) => (b.year ?? 0) - (a.year ?? 0))
+    .slice(0, 5);
 
   if (!publications.length) {
     elements.publicationsList.innerHTML = "<li>No publications listed yet.</li>";
@@ -288,6 +280,25 @@ function showLoadError() {
     elements.bioText.textContent =
       "Unable to load data. If you are previewing locally, run a static server (e.g. `python -m http.server`).";
   }
+}
+
+function renderTimelineList(container, items) {
+  container.innerHTML = "";
+  items
+    .sort((a, b) => (parseDate(b.start) ?? 0) - (parseDate(a.start) ?? 0))
+    .forEach((item) => {
+      const li = document.createElement("li");
+      const date = document.createElement("div");
+      date.className = "timeline__date";
+      date.textContent = [item.start, item.end].filter(Boolean).join(" – ");
+
+      const detail = document.createElement("div");
+      detail.className = "timeline__detail";
+      detail.textContent = [item.title, item.meta].filter(Boolean).join(" · ");
+
+      li.append(date, detail);
+      container.appendChild(li);
+    });
 }
 
 function parseDate(value) {

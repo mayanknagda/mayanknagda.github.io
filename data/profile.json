@@ -20,8 +20,16 @@
       "external": true
     }
   ],
-  "bio": "PhD candidate in Generative AI at TU Kaiserslautern. I work on topic modeling, diffusion for time series, and evaluation methods for reliable AI systems. I enjoy turning research prototypes into production-ready tools.",
+  "bio": "PhD candidate at TU Kaiserslautern with experience in generative and physics-informed AI. I’ve worked on large language models, topic modeling, diffusion models for time-series data, and physics-informed neural networks (PINNs) across a range of applied use cases. I’ve also developed robust evaluation methodologies across multiple tasks.",
   "news": [
+    {
+      "title": "SetPINNs got accepted at AISTATS as spotlight.",
+      "date": "Jan 2026"
+    },
+    {
+      "title": "Papers presented at EurIPS",
+      "date": "Dec 2025"
+    },
     {
       "title": "Talk at ECML-PKDD 2025",
       "date": "Aug 2025",
@@ -65,7 +73,7 @@
       "degree": "PhD in Computer Science",
       "institution": "TU Kaiserslautern",
       "location": "Germany",
-      "start": "2022",
+      "start": "Nov 2022",
       "end": "Early 2026 (expected)"
     },
     {
@@ -78,6 +86,6 @@
   ],
   "misc": [],
   "footer": {
-    "note": "Let’s collaborate on research and applied AI systems."
+    "note": ""
   }
 }
