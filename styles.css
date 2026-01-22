@@ -1,12 +1,12 @@
 :root {
   --font-body: "Source Serif 4", Georgia, serif;
   --font-display: "Space Grotesk", "Helvetica Neue", sans-serif;
-  --bg: #f6f1e8;
+  --bg: #ffffff;
   --text: #1b1b1b;
   --muted: #5c5c5c;
   --accent: #0f6b6d;
   --line: #d9d0c3;
-  --max-width: 780px;
+  --max-width: 920px;
 }
 
 * {
@@ -17,9 +17,7 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--text);
-  background: radial-gradient(120% 120% at 20% 10%, #fff7e7 0%, transparent 55%),
-    radial-gradient(110% 110% at 80% 0%, #edf4f2 0%, transparent 60%),
-    var(--bg);
+  background: var(--bg);
   line-height: 1.6;
 }
 
@@ -79,16 +77,16 @@ a:focus-visible {
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .section h3 {
   margin: 0;
   font-family: var(--font-display);
   font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: none;
+  letter-spacing: normal;
   color: var(--muted);
 }
 
@@ -98,9 +96,9 @@ a:focus-visible {
 }
 
 .item-list {
-  list-style: none;
+  list-style: disc;
   margin: 0;
-  padding: 0;
+  padding-left: 1.2rem;
   display: grid;
   gap: 0.6rem;
 }
@@ -115,9 +113,9 @@ a:focus-visible {
 }
 
 .timeline {
-  list-style: none;
+  list-style: disc;
   margin: 0;
-  padding: 0;
+  padding-left: 1.2rem;
   display: grid;
   gap: 0.9rem;
 }

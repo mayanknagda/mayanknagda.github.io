@@ -15,7 +15,6 @@ const elements = {
   timelineEducation: document.getElementById("timeline-education"),
   bioText: document.getElementById("bio-text"),
   publicationsList: document.getElementById("publications-list"),
-  projectsList: document.getElementById("projects-list"),
   miscList: document.getElementById("misc-list"),
   footer: document.getElementById("footer")
 };
@@ -24,9 +23,8 @@ loadPage();
 
 async function loadPage() {
   try {
-    const [profile, projects, publications] = await Promise.all([
+    const [profile, publications] = await Promise.all([
       fetchJSON("data/profile.json"),
-      fetchJSON("data/projects.json").catch(() => null),
       fetchJSON("data/publications.json").catch(() => null)
     ]);
 
@@ -38,7 +36,6 @@ async function loadPage() {
       renderTimeline(profile);
       renderBio(profile);
       renderPublications(publications);
-      renderProjects(projects);
       renderMisc(profile.misc);
       renderFooter(profile);
     }
@@ -178,40 +175,6 @@ function renderPublications(publicationsData) {
   });
 }
 
-function renderProjects(projectsData) {
-  if (!elements.projectsList) return;
-  elements.projectsList.innerHTML = "";
-  const projects = getProjectsArray(projectsData).filter((project) => project.featured !== false);
-
-  if (!projects.length) {
-    elements.projectsList.innerHTML = "<li>No pet projects yet.</li>";
-    return;
-  }
-
-  projects.forEach((project) => {
-    const li = document.createElement("li");
-    const linkTarget = project.links?.find((link) => link?.url) ?? null;
-    if (linkTarget) {
-      const link = document.createElement("a");
-      link.href = linkTarget.url;
-      link.textContent = project.name;
-      if (linkTarget.external) {
-        link.target = "_blank";
-        link.rel = "noopener";
-      }
-      li.appendChild(link);
-    } else {
-      li.textContent = project.name;
-    }
-    if (project.summary) {
-      const detail = document.createElement("span");
-      detail.textContent = ` — ${project.summary}`;
-      li.appendChild(detail);
-    }
-    elements.projectsList.appendChild(li);
-  });
-}
-
 function renderMisc(misc) {
   if (!elements.miscList) return;
   elements.miscList.innerHTML = "";
@@ -259,13 +222,6 @@ function renderFooter(profile) {
 function setText(element, value) {
   if (!element) return;
   element.textContent = value ?? "";
-}
-
-function getProjectsArray(data) {
-  if (!data) return [];
-  if (Array.isArray(data)) return data;
-  if (Array.isArray(data.projects)) return data.projects;
-  return [];
 }
 
 function getPublicationsArray(data) {
