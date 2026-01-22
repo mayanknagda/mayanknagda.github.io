@@ -11,6 +11,8 @@ const elements = {
   name: document.getElementById("name"),
   meta: document.getElementById("meta"),
   newList: document.getElementById("new-list"),
+  newListArchive: document.getElementById("new-list-archive"),
+  newDetails: document.getElementById("new-details"),
   timelineExperience: document.getElementById("timeline-experience"),
   timelineEducation: document.getElementById("timeline-education"),
   bioText: document.getElementById("bio-text"),
@@ -78,31 +80,30 @@ function renderNews(news) {
 
   if (!items.length) {
     elements.newList.innerHTML = "<li>No updates yet.</li>";
+    if (elements.newDetails) {
+      elements.newDetails.hidden = true;
+    }
     return;
   }
 
-  items.forEach((item) => {
-    const li = document.createElement("li");
-    const title = item.title ?? "Update";
-    const date = item.date ? `${item.date} · ` : "";
-    if (item.link) {
-      const link = document.createElement("a");
-      link.href = item.link;
-      link.textContent = title;
-      link.target = "_blank";
-      link.rel = "noopener";
-      li.textContent = date;
-      li.appendChild(link);
-    } else {
-      li.textContent = `${date}${title}`;
-    }
-    if (item.description) {
-      const detail = document.createElement("span");
-      detail.textContent = ` — ${item.description}`;
-      li.appendChild(detail);
-    }
-    elements.newList.appendChild(li);
+  const topItems = items.slice(0, 3);
+  const restItems = items.slice(3);
+
+  topItems.forEach((item) => {
+    elements.newList.appendChild(createNewsItem(item));
   });
+
+  if (elements.newListArchive && elements.newDetails) {
+    elements.newListArchive.innerHTML = "";
+    if (restItems.length) {
+      restItems.forEach((item) => {
+        elements.newListArchive.appendChild(createNewsItem(item));
+      });
+      elements.newDetails.hidden = false;
+    } else {
+      elements.newDetails.hidden = true;
+    }
+  }
 }
 
 function renderTimeline(profile) {
@@ -217,6 +218,29 @@ function renderFooter(profile) {
   const year = new Date().getFullYear();
   const note = profile.footer?.note ?? "";
   elements.footer.textContent = `© ${year} ${profile.name ?? ""}${note ? ` · ${note}` : ""}`;
+}
+
+function createNewsItem(item) {
+  const li = document.createElement("li");
+  const title = item.title ?? "Update";
+  const date = item.date ? `${item.date} · ` : "";
+  if (item.link) {
+    const link = document.createElement("a");
+    link.href = item.link;
+    link.textContent = title;
+    link.target = "_blank";
+    link.rel = "noopener";
+    li.textContent = date;
+    li.appendChild(link);
+  } else {
+    li.textContent = `${date}${title}`;
+  }
+  if (item.description) {
+    const detail = document.createElement("span");
+    detail.textContent = ` — ${item.description}`;
+    li.appendChild(detail);
+  }
+  return li;
 }
 
 function setText(element, value) {

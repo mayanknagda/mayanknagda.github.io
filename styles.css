@@ -92,7 +92,6 @@ a:focus-visible {
 
 .bio {
   margin: 0;
-  max-width: 68ch;
 }
 
 .item-list {
@@ -143,6 +142,17 @@ a:focus-visible {
   margin: 0;
   color: var(--muted);
   font-size: 0.95rem;
+}
+
+.section-details {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.section-details summary {
+  cursor: pointer;
+  color: var(--accent);
 }
 
 .footer {
