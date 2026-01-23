@@ -58,7 +58,7 @@ a:focus-visible {
 }
 
 .intro h1 {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.2rem;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(2rem, 4vw, 3rem);
@@ -71,6 +71,7 @@ a:focus-visible {
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+  margin-bottom: 0.15rem;
 }
 
 .theme-toggle {
@@ -94,7 +95,7 @@ a:focus-visible {
 
 .meta-list {
   list-style: none;
-  margin: 0;
+  margin: 0.35rem 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -104,9 +105,10 @@ a:focus-visible {
 }
 
 .now-line {
-  margin: 0;
+  margin: 0 0 0.2rem;
   color: var(--muted);
   font-size: 1rem;
+  font-style: italic;
 }
 
 .meta-list li {
