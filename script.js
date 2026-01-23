@@ -138,7 +138,7 @@ function renderTimeline(profile) {
 
 function renderBio(profile) {
   if (!elements.bioText) return;
-  setText(elements.bioText, profile.bio ?? "");
+  setMarkdown(elements.bioText, profile.bio ?? "");
 }
 
 function renderPublications(publicationsData) {
@@ -160,16 +160,16 @@ function renderPublications(publicationsData) {
     if (pub.link) {
       const link = document.createElement("a");
       link.href = pub.link;
-      link.textContent = pub.title;
+      link.innerHTML = renderInlineMarkdown(pub.title ?? "", { stripLinks: true });
       link.target = "_blank";
       link.rel = "noopener";
       li.appendChild(link);
     } else {
-      li.textContent = pub.title;
+      li.innerHTML = renderInlineMarkdown(pub.title ?? "");
     }
     if (meta) {
       const detail = document.createElement("span");
-      detail.textContent = ` — ${meta}`;
+      detail.innerHTML = ` — ${renderInlineMarkdown(meta)}`;
       li.appendChild(detail);
     }
     elements.publicationsList.appendChild(li);
@@ -189,23 +189,23 @@ function renderMisc(misc) {
   items.forEach((item) => {
     const li = document.createElement("li");
     if (typeof item === "string") {
-      li.textContent = item;
+      li.innerHTML = renderInlineMarkdown(item);
     } else if (item?.label) {
       if (item.url) {
         const link = document.createElement("a");
         link.href = item.url;
-        link.textContent = item.label;
+        link.innerHTML = renderInlineMarkdown(item.label ?? "", { stripLinks: true });
         if (item.external) {
           link.target = "_blank";
           link.rel = "noopener";
         }
         li.appendChild(link);
       } else {
-        li.textContent = item.label;
+        li.innerHTML = renderInlineMarkdown(item.label ?? "");
       }
       if (item.note) {
         const detail = document.createElement("span");
-        detail.textContent = ` — ${item.note}`;
+        detail.innerHTML = ` — ${renderInlineMarkdown(item.note)}`;
         li.appendChild(detail);
       }
     }
@@ -223,21 +223,28 @@ function renderFooter(profile) {
 function createNewsItem(item) {
   const li = document.createElement("li");
   const title = item.title ?? "Update";
-  const date = item.date ? `${item.date} · ` : "";
+  if (item.date) {
+    const date = document.createElement("span");
+    date.className = "news-date";
+    date.textContent = `${item.date} · `;
+    li.appendChild(date);
+  }
   if (item.link) {
     const link = document.createElement("a");
     link.href = item.link;
-    link.textContent = title;
+    link.innerHTML = renderInlineMarkdown(title, { stripLinks: true });
     link.target = "_blank";
     link.rel = "noopener";
-    li.textContent = date;
     li.appendChild(link);
   } else {
-    li.textContent = `${date}${title}`;
+    const span = document.createElement("span");
+    span.innerHTML = renderInlineMarkdown(title);
+    li.appendChild(span);
   }
   if (item.description) {
     const detail = document.createElement("span");
-    detail.textContent = ` — ${item.description}`;
+    detail.className = "news-detail";
+    detail.innerHTML = ` — ${renderInlineMarkdown(item.description)}`;
     li.appendChild(detail);
   }
   return li;
@@ -246,6 +253,77 @@ function createNewsItem(item) {
 function setText(element, value) {
   if (!element) return;
   element.textContent = value ?? "";
+}
+
+function setMarkdown(element, value) {
+  if (!element) return;
+  element.innerHTML = renderMarkdown(value ?? "");
+}
+
+function renderMarkdown(value) {
+  if (value === null || value === undefined) return "";
+  const text = String(value);
+  if (!text.trim()) return "";
+  const blocks = text.split(/\n\s*\n/);
+  return blocks.map((block) => renderMarkdownBlock(block)).join("");
+}
+
+function renderMarkdownBlock(block) {
+  const trimmed = block.trim();
+  if (!trimmed) return "";
+  const lines = trimmed.split(/\n/);
+  const headingMatch = lines[0].match(/^(#{1,6})\s+(.*)$/);
+  if (headingMatch && lines.length === 1) {
+    const level = headingMatch[1].length;
+    const content = renderInlineMarkdown(headingMatch[2]);
+    return `<h${level}>${content}</h${level}>`;
+  }
+  const isUnordered = lines.every((line) => /^[-*]\s+/.test(line));
+  if (isUnordered) {
+    const items = lines
+      .map((line) => line.replace(/^[-*]\s+/, ""))
+      .map((line) => `<li>${renderInlineMarkdown(line)}</li>`)
+      .join("");
+    return `<ul>${items}</ul>`;
+  }
+  const isOrdered = lines.every((line) => /^\d+\.\s+/.test(line));
+  if (isOrdered) {
+    const items = lines
+      .map((line) => line.replace(/^\d+\.\s+/, ""))
+      .map((line) => `<li>${renderInlineMarkdown(line)}</li>`)
+      .join("");
+    return `<ol>${items}</ol>`;
+  }
+  const paragraph = renderInlineMarkdown(lines.join("\n"));
+  return `<p>${paragraph}</p>`;
+}
+
+function renderInlineMarkdown(value, options = {}) {
+  if (value === null || value === undefined) return "";
+  let html = escapeHtml(String(value));
+  html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  html = html.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  if (options.stripLinks) {
+    html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g, "$1");
+  } else {
+    html = html.replace(
+      /\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1</a>'
+    );
+  }
+  html = html.replace(/&lt;red&gt;([\s\S]*?)&lt;\/red&gt;/g, '<span class="markdown-red">$1</span>');
+  html = html.replace(/\n/g, "<br>");
+  return html;
+}
+
+function escapeHtml(value) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function getPublicationsArray(data) {
@@ -274,7 +352,7 @@ function renderTimelineList(container, items) {
 
       const detail = document.createElement("div");
       detail.className = "timeline__detail";
-      detail.textContent = [item.title, item.meta].filter(Boolean).join(" · ");
+      detail.innerHTML = renderInlineMarkdown([item.title, item.meta].filter(Boolean).join(" · "));
 
       li.append(date, detail);
       container.appendChild(li);
