@@ -1,15 +1,16 @@
 :root {
   --font-body: "Source Serif 4", Georgia, serif;
   --font-display: "Space Grotesk", "Helvetica Neue", sans-serif;
-  --bg: #15181d;
-  --text: #e6e1da;
-  --muted: #a2a7ae;
-  --accent: #7fb6aa;
-  --accent-strong: #67a497;
-  --line: #2a323a;
-  --red: #c46a66;
+  --bg-gradient: radial-gradient(circle at top, #f6f0e8 0%, #f1e9df 40%, #ede2d6 100%);
+  --text: #1c1a17;
+  --muted: #5f5a54;
+  --accent: #0f6b6d;
+  --accent-strong: #0b4d4f;
+  --line: #d9d0c3;
+  --red: #b15855;
+  --code-bg: rgba(0, 0, 0, 0.06);
   --max-width: 920px;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
@@ -20,8 +21,20 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--text);
-  background: radial-gradient(circle at top, #1b2027 0%, #14181e 45%, #111318 100%);
+  background: var(--bg-gradient);
   line-height: 1.6;
+}
+
+body.theme-dark {
+  --bg-gradient: radial-gradient(circle at top, #1b2027 0%, #14181e 45%, #111318 100%);
+  --text: #e6e1da;
+  --muted: #a2a7ae;
+  --accent: #7fb6aa;
+  --accent-strong: #67a497;
+  --line: #2a323a;
+  --red: #c46a66;
+  --code-bg: rgba(255, 255, 255, 0.08);
+  color-scheme: dark;
 }
 
 a {
@@ -50,6 +63,33 @@ a:focus-visible {
   font-weight: 600;
   font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: -0.02em;
+}
+
+.intro__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.theme-toggle {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .meta-list {
@@ -122,7 +162,7 @@ a:focus-visible {
   font-size: 0.9em;
   padding: 0.15em 0.35em;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--code-bg);
 }
 
 .item-list {

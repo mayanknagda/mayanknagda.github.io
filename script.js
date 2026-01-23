@@ -18,9 +18,11 @@ const elements = {
   bioText: document.getElementById("bio-text"),
   publicationsList: document.getElementById("publications-list"),
   miscList: document.getElementById("misc-list"),
-  footer: document.getElementById("footer")
+  footer: document.getElementById("footer"),
+  themeToggle: document.getElementById("theme-toggle")
 };
 
+initThemeToggle();
 loadPage();
 
 async function loadPage() {
@@ -337,6 +339,24 @@ function showLoadError() {
   if (elements.bioText) {
     elements.bioText.textContent =
       "Unable to load data. If you are previewing locally, run a static server (e.g. `python -m http.server`).";
+  }
+}
+
+function initThemeToggle() {
+  if (!elements.themeToggle) return;
+  const savedTheme = localStorage.getItem("theme");
+  const isDark = savedTheme === "dark";
+  setTheme(isDark);
+  elements.themeToggle.addEventListener("click", () => {
+    setTheme(!document.body.classList.contains("theme-dark"));
+  });
+}
+
+function setTheme(isDark) {
+  document.body.classList.toggle("theme-dark", isDark);
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  if (elements.themeToggle) {
+    elements.themeToggle.textContent = isDark ? "Light mode" : "Dark mode";
   }
 }
 
