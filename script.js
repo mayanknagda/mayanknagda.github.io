@@ -9,6 +9,7 @@ const dataCache = new Map();
 
 const elements = {
   name: document.getElementById("name"),
+  nowText: document.getElementById("now-text"),
   meta: document.getElementById("meta"),
   newList: document.getElementById("new-list"),
   newListArchive: document.getElementById("new-list-archive"),
@@ -39,6 +40,7 @@ async function loadPage() {
     if (profile) {
       document.title = profile.name ?? "Home";
       setText(elements.name, profile.name);
+      renderNow(profile);
       renderMeta(profile);
       renderNews(profile.news);
       renderTimeline(profile);
@@ -77,6 +79,17 @@ function renderMeta(profile) {
     }
     elements.meta.appendChild(li);
   });
+}
+
+function renderNow(profile) {
+  if (!elements.nowText) return;
+  const now = profile.now ?? profile.hero?.now ?? "";
+  if (!now) {
+    elements.nowText.hidden = true;
+    return;
+  }
+  elements.nowText.hidden = false;
+  elements.nowText.innerHTML = renderInlineMarkdown(now);
 }
 
 function renderNews(news) {
@@ -240,7 +253,10 @@ function renderFooter(profile) {
   if (!elements.footer) return;
   const year = new Date().getFullYear();
   const note = profile.footer?.note ?? "";
-  elements.footer.textContent = `© ${year} ${profile.name ?? ""}${note ? ` · ${note}` : ""}`;
+  const updatedLabel = getLastUpdatedLabel();
+  const copy = `© ${year} ${profile.name ?? ""}`;
+  const parts = [copy, note, updatedLabel].filter(Boolean).join(" · ");
+  elements.footer.textContent = parts;
 }
 
 function createNewsItem(item) {
@@ -361,6 +377,14 @@ function showLoadError() {
     elements.bioText.textContent =
       "Unable to load data. If you are previewing locally, run a static server (e.g. `python -m http.server`).";
   }
+}
+
+function getLastUpdatedLabel() {
+  if (!document.lastModified) return "";
+  const parsed = new Date(document.lastModified);
+  if (Number.isNaN(parsed.getTime())) return "";
+  const formatted = parsed.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return `Last updated ${formatted}`;
 }
 
 function initThemeToggle() {

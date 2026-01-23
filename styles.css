@@ -103,6 +103,12 @@ a:focus-visible {
   font-size: 0.95rem;
 }
 
+.now-line {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
 .meta-list li {
   display: inline-flex;
   align-items: center;
@@ -122,6 +128,10 @@ a:focus-visible {
   font-size: 1.2rem;
   text-transform: none;
   letter-spacing: normal;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35rem;
 }
 
 .section h3 {
