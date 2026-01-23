@@ -14,7 +14,11 @@ const elements = {
   newListArchive: document.getElementById("new-list-archive"),
   newDetails: document.getElementById("new-details"),
   timelineExperience: document.getElementById("timeline-experience"),
+  timelineExperienceArchive: document.getElementById("timeline-experience-archive"),
+  timelineExperienceDetails: document.getElementById("timeline-experience-details"),
   timelineEducation: document.getElementById("timeline-education"),
+  timelineEducationArchive: document.getElementById("timeline-education-archive"),
+  timelineEducationDetails: document.getElementById("timeline-education-details"),
   bioText: document.getElementById("bio-text"),
   publicationsList: document.getElementById("publications-list"),
   miscList: document.getElementById("misc-list"),
@@ -112,30 +116,47 @@ function renderTimeline(profile) {
   if (!elements.timelineExperience || !elements.timelineEducation) return;
   elements.timelineExperience.innerHTML = "";
   elements.timelineEducation.innerHTML = "";
+  if (elements.timelineExperienceArchive) {
+    elements.timelineExperienceArchive.innerHTML = "";
+  }
+  if (elements.timelineEducationArchive) {
+    elements.timelineEducationArchive.innerHTML = "";
+  }
 
-  const experience = [];
-  const education = [];
+  const experience = (Array.isArray(profile.experience) ? profile.experience : []).map((item) => ({
+    start: item.start,
+    end: item.end,
+    title: [item.role, item.organization].filter(Boolean).join(" — "),
+    meta: [item.location, item.type].filter(Boolean).join(" · ")
+  }));
 
-  (Array.isArray(profile.experience) ? profile.experience : []).forEach((item) => {
-    experience.push({
-      start: item.start,
-      end: item.end,
-      title: [item.role, item.organization].filter(Boolean).join(" — "),
-      meta: [item.location, item.type].filter(Boolean).join(" · ")
-    });
-  });
+  const education = (Array.isArray(profile.education) ? profile.education : []).map((item) => ({
+    start: item.start,
+    end: item.end,
+    title: [item.degree, item.institution].filter(Boolean).join(" — "),
+    meta: item.location
+  }));
 
-  (Array.isArray(profile.education) ? profile.education : []).forEach((item) => {
-    education.push({
-      start: item.start,
-      end: item.end,
-      title: [item.degree, item.institution].filter(Boolean).join(" — "),
-      meta: item.location
-    });
-  });
+  const sortedExperience = experience.sort((a, b) => (parseDate(b.start) ?? 0) - (parseDate(a.start) ?? 0));
+  const sortedEducation = education.sort((a, b) => (parseDate(b.start) ?? 0) - (parseDate(a.start) ?? 0));
 
-  renderTimelineList(elements.timelineExperience, experience);
-  renderTimelineList(elements.timelineEducation, education);
+  const experienceTop = sortedExperience.slice(0, 2);
+  const experienceRest = sortedExperience.slice(2);
+  const educationTop = sortedEducation.slice(0, 1);
+  const educationRest = sortedEducation.slice(1);
+
+  renderTimelineList(elements.timelineExperience, experienceTop);
+  renderTimelineList(elements.timelineEducation, educationTop);
+
+  if (elements.timelineExperienceArchive && elements.timelineExperienceDetails) {
+    renderTimelineList(elements.timelineExperienceArchive, experienceRest);
+    elements.timelineExperienceDetails.hidden = !experienceRest.length;
+  }
+
+  if (elements.timelineEducationArchive && elements.timelineEducationDetails) {
+    renderTimelineList(elements.timelineEducationArchive, educationRest);
+    elements.timelineEducationDetails.hidden = !educationRest.length;
+  }
 }
 
 function renderBio(profile) {
@@ -363,7 +384,6 @@ function setTheme(isDark) {
 function renderTimelineList(container, items) {
   container.innerHTML = "";
   items
-    .sort((a, b) => (parseDate(b.start) ?? 0) - (parseDate(a.start) ?? 0))
     .forEach((item) => {
       const li = document.createElement("li");
       const date = document.createElement("div");

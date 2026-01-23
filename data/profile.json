@@ -73,7 +73,7 @@
       "degree": "PhD in Computer Science",
       "institution": "TU Kaiserslautern",
       "location": "Germany",
-      "start": "Nov 2022",
+      "start": "2022",
       "end": "Early 2026 (expected)"
     },
     {
@@ -82,6 +82,13 @@
       "location": "Germany",
       "start": "2020",
       "end": "2022"
+    },
+    {
+      "degree": "BTech in Computer Science and Engineering",
+      "institution": "SRM-IST",
+      "location": "India",
+      "start": "2019",
+      "end": "2015"
     }
   ],
   "misc": [],

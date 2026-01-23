@@ -1,7 +1,7 @@
 :root {
   --font-body: "Source Serif 4", Georgia, serif;
   --font-display: "Space Grotesk", "Helvetica Neue", sans-serif;
-  --bg-gradient: radial-gradient(circle at top, #f6f0e8 0%, #f1e9df 40%, #ede2d6 100%);
+  --bg-gradient: radial-gradient(circle at top, #f9fbff 0%, #ffffff 55%, #f6f8fb 100%);
   --text: #1c1a17;
   --muted: #5f5a54;
   --accent: #0f6b6d;
