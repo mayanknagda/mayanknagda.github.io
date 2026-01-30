@@ -524,7 +524,11 @@ function normalizeMiscManifest(manifest) {
         return { file: item, title: toTitleFromFilename(item) };
       }
       if (item?.file) {
-        return { file: item.file, title: item.title || toTitleFromFilename(item.file) };
+        return {
+          file: item.file,
+          title: item.title || toTitleFromFilename(item.file),
+          date: item.date || null
+        };
       }
       return null;
     })
@@ -532,7 +536,13 @@ function normalizeMiscManifest(manifest) {
 }
 
 async function fetchMiscMarkdowns() {
-  const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/misc?ref=main`;
+  const manifest = await fetchJSON("misc/index.json").catch(() => null);
+  const manifestEntries = normalizeMiscManifest(manifest);
+  if (manifestEntries.length) {
+    return manifestEntries;
+  }
+
+  const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/misc`;
 
   try {
     const response = await fetch(apiUrl, { cache: "no-store" });
@@ -558,9 +568,7 @@ async function fetchMiscMarkdowns() {
     return await hydrateMarkdownMeta(directoryEntries);
   }
 
-  const manifest = await fetchJSON("misc/index.json").catch(() => null);
-  const entries = normalizeMiscManifest(manifest);
-  return await hydrateMarkdownMeta(entries);
+  return [];
 }
 
 function toTitleFromFilename(filename) {

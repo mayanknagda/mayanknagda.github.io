@@ -23,7 +23,8 @@ This repository is a static personal site. Follow these guidelines when making c
   date: 2025-12-20
   ---
   ```
-- If no frontmatter `date:` is present, the list falls back to the file’s Last-Modified header.
+- The site uses a generated `misc/index.json` for GitHub Pages. It is created by a GitHub Action on every push that touches `misc/`.
+- If no frontmatter `date:` is present, the generated index falls back to the file’s git creation date.
 - The note view is `misc.html?doc=filename.md` and uses the site theme/background.
 
 ## Do Not Do
