@@ -5,7 +5,7 @@ This repository powers [mayanknagda.github.io](https://mayanknagda.github.io), a
 ## Features
 - Responsive layout with light/dark theme toggle (defaults to light)
 - Home page fed entirely from JSON data sources
-- Markdown notes published as static HTML pages
+- Markdown notes rendered on demand from `misc/`
 - Dedicated pages for publications with reusable styling
 - Easy content updates via `data/*.json` files
 - GitHub Pages–friendly (no build step required)
@@ -16,19 +16,19 @@ This repository powers [mayanknagda.github.io](https://mayanknagda.github.io), a
 ├── data/
 │   ├── profile.json       # Hero content, section blurbs, skills, social links
 │   └── publications.json  # Publication catalog with links & metadata
-├── misc/                  # Markdown notes + generated HTML pages + index
+├── misc/                  # Markdown notes + generated index
 ├── index.html             # Home page shell (loads JSON and renders sections)
 ├── publications.html      # Publications page shell
-├── markdown.js            # Markdown viewer (fallback / direct rendering)
+├── markdown.js            # Markdown viewer (direct rendering)
 ├── styles.css             # Shared styling + responsive theme system
-├── scripts/               # Helpers for generating misc pages/index
+├── scripts/               # Helpers for generating misc index
 └── script.js              # Single client-side renderer + theme logic
 ```
 
 ## Editing Content
 1. Update `data/profile.json` for headline info, experience, education, skills, and footer note.
 2. Maintain publication metadata in `data/publications.json`; each item can include authors, venue, year, tags, and a `link`.
-3. Add markdown notes to `misc/` and push. GitHub Actions generates `misc/index.json` and `misc/*.html`.
+3. Add markdown notes to `misc/` and push. GitHub Actions generates `misc/index.json`.
 
 Changes appear after a page refresh once the files are committed to `main` and GitHub Actions finishes.
 

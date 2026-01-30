@@ -6,7 +6,6 @@ on:
     paths:
       - "misc/**"
       - "scripts/generate-misc-index.js"
-      - "scripts/generate-misc-pages.js"
 
 jobs:
   build:
@@ -24,13 +23,11 @@ jobs:
           node-version: "20"
       - name: Generate index
         run: node scripts/generate-misc-index.js
-      - name: Generate html pages
-        run: node scripts/generate-misc-pages.js
       - name: Commit outputs if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add misc/index.json misc/*.html
+          git add misc/index.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0

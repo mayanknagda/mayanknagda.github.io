@@ -511,8 +511,7 @@ function unique(list) {
 }
 
 function buildMiscLink(filename) {
-  const htmlName = filename.replace(/\.md$/i, ".html");
-  return `misc/${encodeURIComponent(htmlName)}`;
+  return `misc.html?doc=${encodeURIComponent(filename)}`;
 }
 
 function normalizeMiscManifest(manifest) {
