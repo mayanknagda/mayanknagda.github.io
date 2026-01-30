@@ -38,7 +38,7 @@ async function loadMarkdownPage() {
   const path = `misc/${safeName}`;
 
   try {
-    const text = await fetchText(path);
+    const { text } = await fetchMarkdownFile(path);
     const { title, body } = extractTitle(text, safeName);
     if (elements.title) {
       elements.title.textContent = title;
@@ -191,7 +191,31 @@ function buildSources(path) {
   return unique([local, remote]);
 }
 
-async function fetchText(path) {
+async function fetchMarkdownFile(path) {
+  try {
+    const result = await fetchTextWithMeta(path);
+    return result;
+  } catch (error) {
+    // fall through to API fetch
+  }
+
+  const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}?ref=main`;
+  const response = await fetch(apiUrl, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status} for ${apiUrl}`);
+  }
+  const data = await response.json();
+  if (data && data.content) {
+    const cleaned = String(data.content).replace(/\n/g, "");
+    const binary = atob(cleaned);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    const text = new TextDecoder("utf-8").decode(bytes);
+    return { text, lastModified: data.last_modified ?? null };
+  }
+  throw new Error("Invalid GitHub API response for markdown file");
+}
+
+async function fetchTextWithMeta(path) {
   const sources = buildSources(path);
   let lastError = null;
 
@@ -203,7 +227,9 @@ async function fetchText(path) {
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status} for ${url.href}`);
       }
-      return await response.text();
+      const text = await response.text();
+      const lastModified = response.headers.get("last-modified");
+      return { text, lastModified };
     } catch (error) {
       lastError = error;
     }
