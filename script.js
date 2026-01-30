@@ -553,6 +553,11 @@ async function fetchMiscMarkdowns() {
     console.warn("GitHub misc fetch failed", error);
   }
 
+  const directoryEntries = await fetchMiscFromDirectoryListing();
+  if (directoryEntries.length) {
+    return await hydrateMarkdownMeta(directoryEntries);
+  }
+
   const manifest = await fetchJSON("misc/index.json").catch(() => null);
   const entries = normalizeMiscManifest(manifest);
   return await hydrateMarkdownMeta(entries);
@@ -647,6 +652,20 @@ async function fetchTextWithMeta(path) {
   }
 
   throw lastError ?? new Error(`Failed to load ${path}`);
+}
+
+async function fetchMiscFromDirectoryListing() {
+  try {
+    const { text } = await fetchTextWithMeta("misc/");
+    const matches = [...text.matchAll(/href="([^"]+\\.md)"/gi)];
+    const files = matches
+      .map((match) => match[1].split("/").pop())
+      .filter((file) => file && file.toLowerCase().endsWith(".md"));
+    const uniqueFiles = [...new Set(files)];
+    return uniqueFiles.map((file) => ({ file, title: toTitleFromFilename(file) }));
+  } catch (error) {
+    return [];
+  }
 }
 
 function formatDate(date) {
