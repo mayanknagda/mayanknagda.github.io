@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mayank Nagda - notes">
+  <title>test test test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+  <main class="page markdown-page">
+    <header class="intro markdown-intro">
+      <div class="intro__top">
+        <a class="back-link" href="../index.html">← Back</a>
+        <button class="theme-toggle" id="theme-toggle" type="button">Dark mode</button>
+      </div>
+      <h1>test test test</h1>
+    </header>
+
+    <section class="section markdown-section">
+      <div class="markdown-body"><p>The content of my note goes here.</p></div>
+    </section>
+  </main>
+
+  <footer class="footer">&nbsp;</footer>
+
+  <script>
+    (function () {
+      var button = document.getElementById("theme-toggle");
+      if (!button) return;
+      var saved = localStorage.getItem("theme");
+      var isDark = saved === "dark";
+      document.body.classList.toggle("theme-dark", isDark);
+      button.textContent = isDark ? "Light mode" : "Dark mode";
+      button.addEventListener("click", function () {
+        var next = !document.body.classList.contains("theme-dark");
+        document.body.classList.toggle("theme-dark", next);
+        localStorage.setItem("theme", next ? "dark" : "light");
+        button.textContent = next ? "Light mode" : "Dark mode";
+      });
+    })();
+  </script>
+</body>
+
+</html>
