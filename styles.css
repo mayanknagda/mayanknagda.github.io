@@ -239,6 +239,39 @@ a:focus-visible {
   gap: 0.4rem;
 }
 
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+
+.markdown-body pre {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  background: var(--code-bg);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.markdown-body pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+  padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 3px solid var(--line);
+  color: var(--muted);
+}
+
+.markdown-body hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0.5rem 0;
+}
+
 .markdown-body code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 0.9em;

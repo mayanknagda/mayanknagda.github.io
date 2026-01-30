@@ -75,6 +75,10 @@ function escapeHtml(value) {
 
 function renderInlineMarkdown(value) {
   let html = escapeHtml(String(value));
+  html = html.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]+)")?\)/g, (match, alt, url, title) => {
+    const titleAttr = title ? ` title="${title}"` : "";
+    return `<img src="${url}" alt="${alt}"${titleAttr}>`;
+  });
   html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
   html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*([^*]+)\*/g, "<em>$1</em>");
@@ -91,38 +95,99 @@ function renderMarkdown(value) {
   if (value === null || value === undefined) return "";
   const text = String(value);
   if (!text.trim()) return "";
-  const blocks = text.split(/\n\s*\n/);
-  return blocks.map((block) => renderMarkdownBlock(block)).join("");
-}
+  const lines = text.split(/\r?\n/);
+  let html = "";
+  let i = 0;
 
-function renderMarkdownBlock(block) {
-  const trimmed = block.trim();
-  if (!trimmed) return "";
-  const lines = trimmed.split(/\n/);
-  const headingMatch = lines[0].match(/^(#{1,6})\s+(.*)$/);
-  if (headingMatch && lines.length === 1) {
-    const level = headingMatch[1].length;
-    const content = renderInlineMarkdown(headingMatch[2]);
-    return `<h${level}>${content}</h${level}>`;
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      i += 1;
+      continue;
+    }
+
+    if (trimmed.startsWith("```")) {
+      const language = trimmed.slice(3).trim();
+      i += 1;
+      const codeLines = [];
+      while (i < lines.length && !lines[i].trim().startsWith("```")) {
+        codeLines.push(lines[i]);
+        i += 1;
+      }
+      if (i < lines.length) {
+        i += 1;
+      }
+      const languageClass = language ? ` class="language-${escapeHtml(language)}"` : "";
+      html += `<pre><code${languageClass}>${escapeHtml(codeLines.join("\n"))}</code></pre>`;
+      continue;
+    }
+
+    if (/^#{1,6}\s+/.test(trimmed)) {
+      const match = trimmed.match(/^(#{1,6})\s+(.*)$/);
+      if (match) {
+        const level = match[1].length;
+        html += `<h${level}>${renderInlineMarkdown(match[2])}</h${level}>`;
+        i += 1;
+        continue;
+      }
+    }
+
+    if (/^>\s?/.test(trimmed)) {
+      const quoteLines = [];
+      while (i < lines.length && /^>\s?/.test(lines[i].trim())) {
+        quoteLines.push(lines[i].trim().replace(/^>\s?/, ""));
+        i += 1;
+      }
+      html += `<blockquote>${renderMarkdown(quoteLines.join("\n"))}</blockquote>`;
+      continue;
+    }
+
+    if (/^(-{3,}|\*{3,})$/.test(trimmed)) {
+      html += "<hr>";
+      i += 1;
+      continue;
+    }
+
+    if (/^(-\s+|\*\s+)/.test(trimmed)) {
+      const items = [];
+      while (i < lines.length && /^(-\s+|\*\s+)/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^(-\s+|\*\s+)/, ""));
+        i += 1;
+      }
+      html += `<ul>${items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("")}</ul>`;
+      continue;
+    }
+
+    if (/^\d+\.\s+/.test(trimmed)) {
+      const items = [];
+      while (i < lines.length && /^\d+\.\s+/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^\d+\.\s+/, ""));
+        i += 1;
+      }
+      html += `<ol>${items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("")}</ol>`;
+      continue;
+    }
+
+    const paragraphLines = [];
+    while (
+      i < lines.length &&
+      lines[i].trim() &&
+      !lines[i].trim().startsWith("```") &&
+      !/^#{1,6}\s+/.test(lines[i].trim()) &&
+      !/^>\s?/.test(lines[i].trim()) &&
+      !/^(-\s+|\*\s+)/.test(lines[i].trim()) &&
+      !/^\d+\.\s+/.test(lines[i].trim()) &&
+      !/^(-{3,}|\*{3,})$/.test(lines[i].trim())
+    ) {
+      paragraphLines.push(lines[i]);
+      i += 1;
+    }
+    html += `<p>${renderInlineMarkdown(paragraphLines.join("\n"))}</p>`;
   }
-  const isUnordered = lines.every((line) => /^[-*]\s+/.test(line));
-  if (isUnordered) {
-    const items = lines
-      .map((line) => line.replace(/^[-*]\s+/, ""))
-      .map((line) => `<li>${renderInlineMarkdown(line)}</li>`)
-      .join("");
-    return `<ul>${items}</ul>`;
-  }
-  const isOrdered = lines.every((line) => /^\d+\.\s+/.test(line));
-  if (isOrdered) {
-    const items = lines
-      .map((line) => line.replace(/^\d+\.\s+/, ""))
-      .map((line) => `<li>${renderInlineMarkdown(line)}</li>`)
-      .join("");
-    return `<ol>${items}</ol>`;
-  }
-  const paragraph = renderInlineMarkdown(lines.join("\n"));
-  return `<p>${paragraph}</p>`;
+
+  return html;
 }
 
 function buildHtmlPage({ title, content }) {
