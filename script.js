@@ -46,7 +46,7 @@ async function loadPage() {
       renderTimeline(profile);
       renderBio(profile);
       renderPublications(publications);
-      renderMisc(profile.misc);
+      await renderMisc(profile.misc);
       renderFooter(profile);
     }
   } catch (error) {
@@ -212,17 +212,40 @@ function renderPublications(publicationsData) {
   });
 }
 
-function renderMisc(misc) {
+async function renderMisc(misc) {
   if (!elements.miscList) return;
   elements.miscList.innerHTML = "";
   const items = Array.isArray(misc) ? misc : [];
+  let markdownItems = [];
 
-  if (!items.length) {
+  try {
+    markdownItems = await fetchMiscMarkdowns();
+  } catch (error) {
+    console.warn("Unable to load misc markdowns", error);
+  }
+
+  const recentMarkdowns = markdownItems
+    .filter((entry) => entry.date)
+    .sort((a, b) => b.date - a.date)
+    .concat(markdownItems.filter((entry) => !entry.date))
+    .slice(0, 4);
+
+  const combinedItems = [
+    ...recentMarkdowns.map((entry) => ({
+      label: entry.title,
+      url: buildMiscLink(entry.file),
+      external: false,
+      date: entry.date
+    })),
+    ...items
+  ];
+
+  if (!combinedItems.length) {
     elements.miscList.innerHTML = "<li>More soon.</li>";
     return;
   }
 
-  items.forEach((item) => {
+  combinedItems.forEach((item) => {
     const li = document.createElement("li");
     if (typeof item === "string") {
       li.innerHTML = renderInlineMarkdown(item);
@@ -238,6 +261,13 @@ function renderMisc(misc) {
         li.appendChild(link);
       } else {
         li.innerHTML = renderInlineMarkdown(item.label ?? "");
+      }
+      const formattedDate = item.date ? formatDate(item.date) : "";
+      if (formattedDate) {
+        const detail = document.createElement("span");
+        detail.className = "misc-date";
+        detail.textContent = ` — ${formattedDate}`;
+        li.appendChild(detail);
       }
       if (item.note) {
         const detail = document.createElement("span");
@@ -478,4 +508,149 @@ async function fetchJSON(path) {
 
 function unique(list) {
   return list.filter((value, index, array) => array.indexOf(value) === index);
+}
+
+function buildMiscLink(filename) {
+  return `misc.html?doc=${encodeURIComponent(filename)}`;
+}
+
+function normalizeMiscManifest(manifest) {
+  if (!manifest) return [];
+  const list = Array.isArray(manifest) ? manifest : manifest.files;
+  if (!Array.isArray(list)) return [];
+  return list
+    .map((item) => {
+      if (typeof item === "string") {
+        return { file: item, title: toTitleFromFilename(item) };
+      }
+      if (item?.file) {
+        return { file: item.file, title: item.title || toTitleFromFilename(item.file) };
+      }
+      return null;
+    })
+    .filter(Boolean);
+}
+
+async function fetchMiscMarkdowns() {
+  const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/misc?ref=main`;
+
+  try {
+    const response = await fetch(apiUrl, { cache: "no-store" });
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        const entries = data
+          .filter((item) => item.type === "file" && item.name.toLowerCase().endsWith(".md"))
+          .map((item) => ({
+            file: item.name,
+            title: toTitleFromFilename(item.name)
+          }))
+          .sort((a, b) => a.title.localeCompare(b.title));
+        return await hydrateMarkdownMeta(entries);
+      }
+    }
+  } catch (error) {
+    console.warn("GitHub misc fetch failed", error);
+  }
+
+  const manifest = await fetchJSON("misc/index.json").catch(() => null);
+  const entries = normalizeMiscManifest(manifest);
+  return await hydrateMarkdownMeta(entries);
+}
+
+function toTitleFromFilename(filename) {
+  const base = filename.replace(/\.md$/i, "");
+  return base
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+async function hydrateMarkdownMeta(entries) {
+  if (!entries.length) return entries;
+  const updates = await Promise.all(
+    entries.map(async (entry) => {
+      try {
+        const { text, lastModified } = await fetchTextWithMeta(`misc/${entry.file}`);
+        const meta = extractMarkdownMeta(text);
+        const title = meta.title || entry.title;
+        const date = meta.date ? new Date(meta.date) : lastModified ? new Date(lastModified) : null;
+        return { ...entry, title, date: date && !Number.isNaN(date.getTime()) ? date : null };
+      } catch (error) {
+        return entry;
+      }
+    })
+  );
+  return updates;
+}
+
+function extractMarkdownMeta(text) {
+  const lines = String(text).split(/\r?\n/);
+  let title = null;
+  let date = null;
+
+  if (lines[0] && lines[0].trim() === "---") {
+    for (let i = 1; i < lines.length; i += 1) {
+      const line = lines[i].trim();
+      if (line === "---") break;
+      const titleMatch = line.match(/^title:\s*(.+)$/i);
+      if (titleMatch && !title) {
+        title = titleMatch[1].trim();
+      }
+      const dateMatch = line.match(/^date:\s*(.+)$/i);
+      if (dateMatch && !date) {
+        date = dateMatch[1].trim();
+      }
+    }
+  }
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (!title) {
+      const match = trimmed.match(/^#{1,6}\s+(.*)$/);
+      if (match) {
+        title = match[1].trim();
+      }
+    }
+    if (!date) {
+      const dateMatch = trimmed.match(/^date:\s*(.+)$/i);
+      if (dateMatch) {
+        date = dateMatch[1].trim();
+      }
+    }
+    if (title && date) break;
+  }
+
+  return { title, date };
+}
+
+async function fetchTextWithMeta(path) {
+  const sources = buildSources(path);
+  let lastError = null;
+
+  for (const source of sources) {
+    try {
+      const url = new URL(source, document.baseURI);
+      url.searchParams.set("v", String(Date.now()));
+      const response = await fetch(url.href, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status} for ${url.href}`);
+      }
+      const text = await response.text();
+      const lastModified = response.headers.get("last-modified");
+      return { text, lastModified };
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError ?? new Error(`Failed to load ${path}`);
+}
+
+function formatDate(date) {
+  const parsed = date instanceof Date ? date : new Date(date);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 }

@@ -1,11 +1,11 @@
 # Mayank Nagda · Personal Site
 
-This repository powers [mayanknagda.github.io](https://mayanknagda.github.io), a data-driven personal site showcasing experience, projects, and publications in Generative AI.
+This repository powers [mayanknagda.github.io](https://mayanknagda.github.io), a data-driven personal site showcasing experience and publications in Generative AI.
 
 ## Features
 - Responsive layout with light/dark theme toggle (defaults to light)
 - Home page fed entirely from JSON data sources
-- Dedicated pages for projects and publications with reusable styling
+- Dedicated pages for publications with reusable styling
 - Easy content updates via `data/*.json` files
 - GitHub Pages–friendly (no build step required)
 
@@ -14,10 +14,8 @@ This repository powers [mayanknagda.github.io](https://mayanknagda.github.io), a
 .
 ├── data/
 │   ├── profile.json       # Hero content, section blurbs, skills, social links
-│   ├── projects.json      # Detailed project portfolio entries
 │   └── publications.json  # Publication catalog with links & metadata
 ├── index.html             # Home page shell (loads JSON and renders sections)
-├── projects.html          # Projects page shell
 ├── publications.html      # Publications page shell
 ├── styles.css             # Shared styling + responsive theme system
 └── script.js              # Single client-side renderer + theme logic
@@ -25,8 +23,7 @@ This repository powers [mayanknagda.github.io](https://mayanknagda.github.io), a
 
 ## Editing Content
 1. Update `data/profile.json` for headline info, experience, education, skills, and footer note.
-2. Add or edit project entries in `data/projects.json` (supports `image`, `tags`, `links`, `featured` flags, etc.).
-3. Maintain publication metadata in `data/publications.json`; each item can include authors, venue, year, tags, and a `link`.
+2. Maintain publication metadata in `data/publications.json`; each item can include authors, venue, year, tags, and a `link`.
 
 Changes appear immediately after a page refresh once the files are committed to `main`.
 

@@ -93,6 +93,21 @@ a:focus-visible {
   color: var(--accent);
 }
 
+.back-link {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 .meta-list {
   list-style: none;
   margin: 0.35rem 0 0;
@@ -177,6 +192,61 @@ a:focus-visible {
   background: var(--code-bg);
 }
 
+.markdown-page {
+  gap: 2rem;
+}
+
+.markdown-section {
+  gap: 1rem;
+}
+
+.markdown-body {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.markdown-body h1 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.markdown-body h2 {
+  font-size: 1.35rem;
+}
+
+.markdown-body h3 {
+  font-size: 1.15rem;
+}
+
+.markdown-body p {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.markdown-body code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background: var(--code-bg);
+}
+
 .item-list {
   list-style: disc;
   margin: 0;
@@ -223,6 +293,11 @@ a:focus-visible {
 
 .section-note {
   margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.misc-date {
   color: var(--muted);
   font-size: 0.95rem;
 }
