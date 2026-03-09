@@ -24,7 +24,7 @@
   "bio": "I am an AI researcher/engineer working on generative and physics-informed machine learning. My work spans large language models, topic modeling, diffusion models for time-series data, and physics-informed neural networks (PINNs). I also develop robust evaluation methodologies across a range of AI tasks and applied use cases.",
   "news": [
     {
-      "title": "SetPINNs got accepted at AISTATS as <red>spotlight (top 3% of the submitted papers)</red>.",
+      "title": "SetPINNs got accepted at AISTATS as <red>spotlight (2.5% of the submitted papers)</red>.",
       "date": "Jan 2026"
     },
     {
@@ -85,11 +85,11 @@
       "end": "2022"
     },
     {
-      "degree": "BTech in Computer Science and Engineering",
+      "degree": "B.Tech. in Computer Science and Engineering",
       "institution": "SRM-IST",
       "location": "India",
-      "start": "2019",
-      "end": "2015"
+      "start": "2015",
+      "end": "2019"
     }
   ],
   "misc": [],
