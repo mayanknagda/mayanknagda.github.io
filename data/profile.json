@@ -1,6 +1,6 @@
 {
   "name": "Mayank Nagda",
-  "now": "Currently exploring generative AI and physics-informed machine learning.",
+  "now": "I have recently moved from academia to the industry.",
   "meta": [
     {
       "label": "Kaiserslautern, Germany"
@@ -45,12 +45,20 @@
   ],
   "experience": [
     {
+      "role": "Senior Staff Engineer (ML/AI)",
+      "organization": "Infineon Technologies AG",
+      "type": "Full Time",
+      "location": "Munich, Germany",
+      "start": "Apr 2026",
+      "end": "Present"
+    },
+    {
       "role": "AI Researcher & Engineer",
       "organization": "TU Kaiserslautern",
       "type": "Full Time",
       "location": "Kaiserslautern, Germany",
       "start": "Nov 2022",
-      "end": "Present"
+      "end": "Mar 2026"
     },
     {
       "role": "Machine Learning Engineer",
@@ -75,7 +83,7 @@
       "institution": "TU Kaiserslautern",
       "location": "Germany",
       "start": "2022",
-      "end": "Early 2026 (expected)"
+      "end": "2026"
     },
     {
       "degree": "M.Sc. in Computer Science",
