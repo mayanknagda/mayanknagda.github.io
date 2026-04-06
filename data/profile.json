@@ -24,6 +24,10 @@
   "bio": "I have done my PhD in AI where I worked on generative and physics-informed machine learning. My work spans large language models, topic modeling, diffusion models for time-series data, and physics-informed neural networks. I also develop robust evaluation methodologies across a range of AI tasks and applied use cases. I have recently moved to the industry.",
   "news": [
     {
+      "title": "Starting as AI engineer at Infineon Technologies in Munich, Germany.",
+      "date": "Apr 2026"
+    },
+    {
       "title": "SetPINNs got accepted at AISTATS as <red>spotlight (2.5% of the submitted papers)</red>.",
       "date": "Jan 2026"
     },
