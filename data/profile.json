@@ -1,9 +1,9 @@
 {
   "name": "Mayank Nagda",
-  "now": "I have recently moved from academia to the industry.",
+  "now": "I develop tailored AI solutions for the semiconductor industry, combining machine learning and agentic systems.",
   "meta": [
     {
-      "label": "Kaiserslautern, Germany"
+      "label": "Munich, Germany"
     },
     {
       "label": "Email",
@@ -21,7 +21,7 @@
       "external": true
     }
   ],
-  "bio": "I have done my PhD in AI where I worked on generative and physics-informed machine learning. My work spans large language models, topic modeling, diffusion models for time-series data, and physics-informed neural networks. I also develop robust evaluation methodologies across a range of AI tasks and applied use cases. I have recently moved to the industry.",
+  "bio": "With a background in generative models, physics-informed learning, and robust AI evaluation, I develop tailored solutions for the semiconductor industry. My work combines machine learning and agentic pipelines to address complex challenges.",
   "news": [
     {
       "title": "Starting as AI engineer at Infineon Technologies in Munich, Germany.",
