@@ -3,7 +3,7 @@
 This repository powers [mayanknagda.github.io](https://mayanknagda.github.io), a data-driven personal site showcasing experience, publications, and notes in Generative AI.
 
 ## Features
-- Responsive layout with light/dark theme toggle (defaults to light)
+- Responsive layout with automatic light/dark mode and a remembered manual override
 - Home page fed entirely from JSON data sources
 - Markdown notes rendered on demand from `misc/`
 - Dedicated pages for publications with reusable styling

@@ -345,20 +345,38 @@ function toTitleFromFilename(filename) {
 
 function initThemeToggle() {
   if (!elements.themeToggle) return;
-  const savedTheme = localStorage.getItem("theme");
-  const isDark = savedTheme === "dark";
-  setTheme(isDark);
+  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+  updateThemeButton(getActiveTheme());
   elements.themeToggle.addEventListener("click", () => {
-    setTheme(!document.body.classList.contains("theme-dark"));
+    const nextTheme = getActiveTheme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = nextTheme;
+    try {
+      localStorage.setItem("theme", nextTheme);
+    } catch (error) {
+      // The selected theme still applies for this page view.
+    }
+    updateThemeButton(nextTheme);
+  });
+
+  systemTheme.addEventListener("change", (event) => {
+    if (!document.documentElement.dataset.theme) {
+      updateThemeButton(event.matches ? "dark" : "light");
+    }
   });
 }
 
-function setTheme(isDark) {
-  document.body.classList.toggle("theme-dark", isDark);
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  if (elements.themeToggle) {
-    elements.themeToggle.textContent = isDark ? "Light mode" : "Dark mode";
-  }
+function getActiveTheme() {
+  const selectedTheme = document.documentElement.dataset.theme;
+  if (selectedTheme === "light" || selectedTheme === "dark") return selectedTheme;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function updateThemeButton(activeTheme) {
+  if (!elements.themeToggle) return;
+  const nextTheme = activeTheme === "dark" ? "Light" : "Dark";
+  elements.themeToggle.textContent = nextTheme;
+  elements.themeToggle.setAttribute("aria-label", `Switch to ${nextTheme.toLowerCase()} mode`);
 }
 
 function getLastUpdatedLabel() {
