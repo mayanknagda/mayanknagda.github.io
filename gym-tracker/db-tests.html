@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Gym Tracker database tests</title></head><body><h1>Database tests</h1><pre id="result">Running...</pre><script type="module">
+import { createDatabase } from './db.mjs';
+import { validateWorkout, validateBodyWeight } from './core.mjs';
+const name = `gym-tracker-test-${crypto.randomUUID()}`, db = createDatabase(name), output = document.querySelector('#result');
+const assert = (condition, message) => { if (!condition) throw new Error(message); };
+try {
+  const workout = validateWorkout({ id: 'w', date: '2026-10-18', status: 'active', name: 'Test', exercises: [] });
+  await db.put('workouts', workout); assert((await db.all('workouts')).length === 1, 'Workout save failed');
+  workout.status = 'finished'; workout.finishedAt = new Date().toISOString(); await db.put('workouts', workout);
+  assert((await db.get('workouts', 'w')).status === 'finished', 'Workout update failed');
+  await db.setMeta('changes', 2); assert((await db.meta('changes')).value === 2, 'Metadata failed');
+  const result = await db.importData({ workouts: [workout], exercises: [], templates: [], bodyweights: [validateBodyWeight({ id: 'b', date: '2026-10-18', grams: 75000 })] });
+  assert(result.added === 1 && result.duplicates === 1, 'Import deduplication failed');
+  await db.remove('workouts', 'w'); assert((await db.all('workouts')).length === 0 && (await db.all('bodyweights')).length === 1, 'Independent deletion failed');
+  output.textContent = 'PASS: save, update, metadata, deduplicated import, delete';
+} catch (error) { output.textContent = `FAIL: ${error.message}`; }
+finally { (await db.open()).close(); indexedDB.deleteDatabase(name); }
+</script></body></html>

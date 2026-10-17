@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Habit Tracker database tests</title></head><body><h1>Database tests</h1><pre id="result">Running...</pre><script type="module">
+import { createDatabase } from './db.mjs';
+import { validateHabit, validateEntry } from './core.mjs';
+const name = `habit-tracker-test-${crypto.randomUUID()}`, db = createDatabase(name), output = document.querySelector('#result');
+const assert = (condition, message) => { if (!condition) throw new Error(message); };
+try {
+  const habit = validateHabit({ id: 'h', name: 'Test', createdAt: '2026-10-18' });
+  const entry = validateEntry({ habitId: 'h', date: '2026-10-18', status: 'complete', valueCenti: 100 });
+  await db.put('habits', habit); await db.put('entries', entry);
+  assert((await db.all('habits')).length === 1 && (await db.all('entries')).length === 1, 'Saves failed');
+  await db.setMeta('changes', 2); assert((await db.meta('changes')).value === 2, 'Metadata failed');
+  const result = await db.importData({ habits: [habit], entries: [entry] });
+  assert(result.added === 0 && result.duplicates === 2, 'Import deduplication failed');
+  await db.deleteHabitWithEntries('h', [entry.id]);
+  assert((await db.all('habits')).length === 0 && (await db.all('entries')).length === 0, 'Atomic deletion failed');
+  output.textContent = 'PASS: save, metadata, deduplicated import, atomic delete';
+} catch (error) { output.textContent = `FAIL: ${error.message}`; }
+finally { (await db.open()).close(); indexedDB.deleteDatabase(name); }
+</script></body></html>

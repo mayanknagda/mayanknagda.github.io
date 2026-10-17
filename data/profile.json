@@ -24,6 +24,10 @@
   "bio": "With a background in generative models, physics-informed learning, and robust AI evaluation, I develop tailored solutions for the semiconductor industry. My work combines machine learning and agentic pipelines to address complex challenges.",
   "news": [
     {
+      "title": "Launched Pocket Spend, Gym Tracker, and Habit Tracker as private offline web apps.",
+      "date": "Oct 2026"
+    },
+    {
       "title": "Paper accepted at TMLR",
       "date": "Sep 2026"
     },
@@ -113,7 +117,23 @@
       "end": "2019"
     }
   ],
-  "misc": [],
+  "misc": [
+    {
+      "label": "Pocket Spend",
+      "url": "/pocket-spend/",
+      "note": "private spending tracker"
+    },
+    {
+      "label": "Gym Tracker",
+      "url": "/gym-tracker/",
+      "note": "workouts and strength progress"
+    },
+    {
+      "label": "Habit Tracker",
+      "url": "/habit-tracker/",
+      "note": "daily habits and streaks"
+    }
+  ],
   "footer": {
     "note": ""
   }
