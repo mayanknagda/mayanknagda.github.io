@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Pocket Spend database tests</title></head><body><h1>Database tests</h1><pre id="result">Running...</pre><script type="module">
+import { createDatabase } from './db.mjs?test=2';
+import { validateTransaction } from './core.mjs';
+const name = `pocket-spend-test-${crypto.randomUUID()}`;
+const db = createDatabase(name);
+const output = document.querySelector('#result');
+const assert = (condition, message) => { if (!condition) throw new Error(message); };
+try {
+  const a = validateTransaction({ id: 'a', type: 'expense', amount: 125, merchant: 'Test', date: '2026-10-18', category: 'Other' });
+  const b = validateTransaction({ id: 'b', type: 'income', amount: 500, merchant: 'Test', date: '2026-10-18', category: 'Other' });
+  await db.putTransaction(a);
+  assert((await db.allTransactions()).length === 1, 'A single save should create one record');
+  await db.setMeta('changes', 1);
+  assert((await db.getMeta('changes')).value === 1, 'Metadata should persist');
+  const result = await db.importTransactions([a, b]);
+  assert(result.added === 1 && result.duplicates === 1, 'Import should skip duplicate IDs');
+  assert((await db.allTransactions()).length === 2, 'Import should add missing records');
+  await db.deleteTransaction('a');
+  assert((await db.allTransactions()).length === 1, 'Delete should remove only one record');
+  output.textContent = 'PASS: save, read, metadata, deduplicated import, delete';
+} catch (error) { output.textContent = `FAIL: ${error.message}`; }
+finally { (await db.openDatabase()).close(); indexedDB.deleteDatabase(name); }
+</script></body></html>
