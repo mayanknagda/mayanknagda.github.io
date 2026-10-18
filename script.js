@@ -554,9 +554,11 @@ function normalizeMiscManifest(manifest) {
 }
 
 async function fetchMiscMarkdowns() {
-  const manifest = await fetchJSON("misc/index.json").catch(() => null);
+  const manifest = await fetch("misc/index.json", { cache: "no-store" })
+    .then((response) => response.ok ? response.json() : null)
+    .catch(() => null);
   const manifestEntries = normalizeMiscManifest(manifest);
-  if (manifestEntries.length) {
+  if (Array.isArray(manifest?.files)) {
     return manifestEntries;
   }
 
