@@ -64,11 +64,12 @@ export function streaks(habit, entries, asOf = localDate()) {
   }
   return { current: run, longest };
 }
-export function completionRate(habits, entries, start, end, asOf = localDate()) {
+export function completionRate(habits, entries, start, end, asOf = localDate(), lookup = null) {
   let due = 0, done = 0;
+  const statusById = lookup || new Map(entries.map(entry => [`${entry.habitId}|${entry.date}`, entry.status]));
   for (let date = start; date <= end && date <= asOf; date = shiftDate(date, 1)) for (const habit of habits) {
     if (!scheduled(habit, date)) continue;
-    const status = statusFor(habit, entries, date);
+    const status = statusById.get(`${habit.id}|${date}`) || 'pending';
     if (status === 'skipped') continue;
     due++; if (status === 'complete') done++;
   }

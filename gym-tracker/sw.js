@@ -1,4 +1,4 @@
-const CACHE = 'gym-tracker-v3';
+const CACHE = 'gym-tracker-v4';
 const ASSETS = ['./', './index.html', './styles.css', './app.mjs', './core.mjs', './db.mjs', './transfer.mjs', './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS))));
 self.addEventListener('activate', event => event.waitUntil((async () => { for (const key of await caches.keys()) if (key.startsWith('gym-tracker-') && key !== CACHE) await caches.delete(key); await self.clients.claim(); })()));
