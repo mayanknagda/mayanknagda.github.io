@@ -1,6 +1,6 @@
 import { DEFAULT_CATEGORIES, today, newId, cents, money, clean, tagsFrom, validateTransaction, itemTotal, receiptDifference, monthly, categoryTotals, suggestions } from './core.mjs';
 import { allTransactions, putTransaction, deleteTransaction, getMeta, setMeta, importTransactions } from './db.mjs';
-import { exportCSV, exportJSON, parseImport, saveFile } from './transfer.mjs';
+import { exportCSV, exportJSON, parseBackup, saveFile } from './transfer.mjs';
 
 const app = document.querySelector('#app');
 const editor = document.querySelector('#editor');
@@ -55,10 +55,10 @@ function renderSettings() {
     ['Use receipts', 'Choose Receipt for shopping. Enter just the receipt total for a quick record, or add items with quantity, unit price, category, and tags. The receipt total is counted once; any item difference is shown clearly.'],
     ['Autocomplete and tags', 'Previously used merchants, categories, items, and tags appear as suggestions. Reusing an item also fills its last price, category, and tags. Separate multiple tags with commas.'],
     ['Read your insights', 'Home shows this month\'s income, expenses, cash flow, and categories. Insights shows trends and item prices. Receipt items split category totals; overlapping tag totals should not be added together.'],
-    ['Keep and restore your data', 'Transactions live in IndexedDB in this browser on this device. JSON is the complete backup; CSV opens in Numbers or Excel. Use Import file to restore missing records without replacing existing ones.'],
+    ['Keep and restore your data', 'Transactions live in this browser. Back up JSON to save records and currency. Export CSV for a spreadsheet. To restore, use Restore JSON or CSV in Settings, then choose the file you saved. Existing records stay untouched.'],
     ['Back up and install', 'Browser data does not automatically sync with iCloud or other devices. Save a backup regularly. On iPhone, open this page in Safari, tap Share, then Add to Home Screen. Visit once online to cache it for offline use.']
   ];
-  return `${head('Settings', 'A quiet place for your data.')}<div class="grid settings-grid"><section class="card"><h2>How to Use</h2>${how.map(([title, body]) => `<details class="help-item"><summary>${esc(title)}</summary><p>${esc(body)}</p></details>`).join('')}</section><section class="card"><h2>Preferences</h2><p class="small-note">Choose a currency before your first transaction. To keep amounts accurate, it stays fixed once you have records.</p><label class="field">Currency<select id="currency" ${state.records.length ? 'disabled' : ''}><option value="USD" ${state.currency === 'USD' ? 'selected' : ''}>USD \u00b7 US dollar</option><option value="EUR" ${state.currency === 'EUR' ? 'selected' : ''}>EUR \u00b7 Euro</option><option value="GBP" ${state.currency === 'GBP' ? 'selected' : ''}>GBP \u00b7 Pound</option><option value="INR" ${state.currency === 'INR' ? 'selected' : ''}>INR \u00b7 Rupee</option></select></label><p class="small-note">The app follows your device's light or dark appearance.</p></section><section class="card"><h2>Data & Backup</h2><p class="subtle">All financial data stays in this browser. It does not sync automatically. Save backups before changing devices or clearing browser data.</p><div class="detail-line"><span>Last backup</span><strong>${esc(backupText)}</strong></div><div class="detail-line"><span>Changes since backup</span><strong>${state.changes}</strong></div>${state.changes >= 10 ? '<p class="pill">Time for a backup</p>' : ''}<div class="button-row"><button class="button" data-export="json">Back up JSON</button><button class="button secondary" data-export="csv">Export CSV</button><button class="button secondary" id="import-button">Import file</button><input id="import-file" type="file" accept=".json,.csv,application/json,text/csv" hidden></div><p class="small-note">JSON preserves all details. CSV opens in Numbers and Excel and can also be imported here. Import adds missing records and leaves existing ones untouched.</p></section><section class="card"><h2>About</h2><p class="subtle">Private spending records that work offline after your first visit.</p><p class="small-note">Version 1.1 \u00b7 Developed by Mayank Nagda</p></section></div>`;
+  return `${head('Settings', 'A quiet place for your data.')}<div class="grid settings-grid"><section class="card"><h2>How to Use</h2>${how.map(([title, body]) => `<details class="help-item"><summary>${esc(title)}</summary><p>${esc(body)}</p></details>`).join('')}</section><section class="card"><h2>Preferences</h2><p class="small-note">Choose a currency before your first transaction. To keep amounts accurate, it stays fixed once you have records.</p><label class="field">Currency<select id="currency" ${state.records.length ? 'disabled' : ''}><option value="USD" ${state.currency === 'USD' ? 'selected' : ''}>USD \u00b7 US dollar</option><option value="EUR" ${state.currency === 'EUR' ? 'selected' : ''}>EUR \u00b7 Euro</option><option value="GBP" ${state.currency === 'GBP' ? 'selected' : ''}>GBP \u00b7 Pound</option><option value="INR" ${state.currency === 'INR' ? 'selected' : ''}>INR \u00b7 Rupee</option></select></label><p class="small-note">The app follows your device's light or dark appearance.</p></section><section class="card"><h2>Data & Backup</h2><p class="subtle">All financial data stays in this browser. It does not sync automatically. Save backups before changing devices or clearing browser data.</p><div class="detail-line"><span>Last backup</span><strong>${esc(backupText)}</strong></div><div class="detail-line"><span>Changes since backup</span><strong>${state.changes}</strong></div>${state.changes >= 10 ? '<p class="pill">Time for a backup</p>' : ''}<div class="button-row"><button class="button" data-export="json">Back up JSON</button><button class="button secondary" data-export="csv">Export CSV</button><button class="button secondary" id="import-button">Restore JSON or CSV</button><input id="import-file" type="file" accept=".json,.csv,application/json,text/csv" hidden></div><p class="small-note">Use Back up JSON for a complete restore file, including currency. Export CSV for a spreadsheet. Restore accepts either file type from this app and adds missing records without replacing existing ones.</p></section><section class="card"><h2>About</h2><p class="subtle">Private spending records that work offline after your first visit.</p><p class="small-note">Version 1.1 \u00b7 Developed by Mayank Nagda</p></section></div>`;
 }
 function render() {
   app.innerHTML = ({ home: renderHome, transactions: renderTransactions, insights: renderInsights, settings: renderSettings })[state.page]();
@@ -94,20 +94,22 @@ function openDetail(id) {
 }
 async function doExport(format) {
   const name = `pocket-spend-${today()}.${format}`;
-  try { await saveFile(name, format === 'json' ? exportJSON(state.records) : exportCSV(state.records), format === 'json' ? 'application/json' : 'text/csv'); state.lastBackup = new Date().toISOString(); state.changes = 0; await setMeta('lastBackup', state.lastBackup); await setMeta('changes', 0); render(); toast('Backup saved. Keep a copy somewhere safe.'); }
+  try { await saveFile(name, format === 'json' ? exportJSON(state.records, state.currency) : exportCSV(state.records), format === 'json' ? 'application/json' : 'text/csv'); state.lastBackup = new Date().toISOString(); state.changes = 0; await setMeta('lastBackup', state.lastBackup); await setMeta('changes', 0); render(); toast('Backup saved. Keep a copy somewhere safe.'); }
   catch (error) { if (error.name !== 'AbortError') errorMessage(error); }
 }
 async function doImport(file) {
   try {
-    const incoming = parseImport(await file.text(), file.name);
+    const { records: incoming, currency } = parseBackup(await file.text(), file.name);
+    if (currency && state.records.length && currency !== state.currency) throw new Error(`This backup uses ${currency}, but this app uses ${state.currency}. Import stopped to avoid mixing currencies.`);
     const existing = new Map(state.records.map(tx => [tx.id, tx]));
     const comparable = tx => JSON.stringify([tx.type, tx.amount, tx.merchant, tx.date, tx.category, tx.notes, tx.tags, tx.items]);
     const conflicts = incoming.filter(tx => existing.has(tx.id) && comparable(existing.get(tx.id)) !== comparable(tx));
     if (conflicts.length) throw new Error(`${conflicts.length} record IDs already exist with different details. Import stopped to protect your data.`);
     const missing = incoming.filter(tx => !existing.has(tx.id));
-    if (!missing.length) { toast('No new transactions to import.'); return; }
+    if (!missing.length) { if (currency && !state.records.length) { await setMeta('currency', currency); state.currency = currency; render(); } toast('No new transactions to import.'); return; }
     if (!confirm(`Import ${missing.length} new transactions? Existing transactions will remain untouched.`)) return;
-    const result = await importTransactions(missing);
+    const result = await importTransactions(missing, currency && !state.records.length ? currency : null);
+    if (currency && !state.records.length) state.currency = currency;
     state.changes += result.added; await setMeta('changes', state.changes); await load(); toast(`Imported ${result.added} transactions.`);
   } catch (error) { errorMessage(error); }
 }

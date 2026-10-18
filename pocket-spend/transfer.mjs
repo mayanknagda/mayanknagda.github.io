@@ -6,8 +6,8 @@ const quoted = value => `"${safeCell(String(value ?? '')).replaceAll('"', '""')}
 export function exportCSV(records) {
   return [columns.join(','), ...records.map(tx => columns.map(key => quoted(key === 'amount' ? (tx.amount / 100).toFixed(2) : key === 'tags' || key === 'items' ? JSON.stringify(tx[key]) : tx[key])).join(','))].join('\r\n');
 }
-export function exportJSON(records) {
-  return JSON.stringify({ format: 'pocket-spend', version: 1, exportedAt: new Date().toISOString(), transactions: records }, null, 2);
+export function exportJSON(records, currency = 'USD') {
+  return JSON.stringify({ format: 'pocket-spend', version: 1, exportedAt: new Date().toISOString(), currency, transactions: records }, null, 2);
 }
 export function parseCSV(text) {
   const rows = []; let row = [], field = '', quotedField = false;
@@ -31,24 +31,30 @@ export function parseCSV(text) {
     return [header, /^'(?:[=+@\-\t\r']|$)/.test(value) ? value.slice(1) : value];
   })));
 }
-export function parseImport(text, filename) {
-  let input;
+export function parseBackup(text, filename) {
+  let input, currency = null;
   if (/\.json$/i.test(filename)) {
     const parsed = JSON.parse(text);
     if (parsed.format !== 'pocket-spend' || parsed.version !== 1 || !Array.isArray(parsed.transactions)) throw new Error('This is not a supported Pocket Spend backup.');
     input = parsed.transactions;
+    if (parsed.currency != null) {
+      if (!['USD', 'EUR', 'GBP', 'INR'].includes(parsed.currency)) throw new Error('Backup has an unsupported currency.');
+      currency = parsed.currency;
+    }
   } else if (/\.csv$/i.test(filename)) {
     input = parseCSV(text).map(row => ({ ...row, id: row.id || newId(), amount: cents(row.amount), tags: row.tags ? JSON.parse(row.tags) : [], items: row.items ? JSON.parse(row.items) : [] }));
   } else throw new Error('Choose a .json or .csv file.');
   if (input.length > 100000) throw new Error('Backup is too large.');
   const ids = new Set();
-  return input.map(record => {
+  const records = input.map(record => {
     const validated = validateTransaction(record);
     if (ids.has(validated.id)) throw new Error('Backup contains repeated transaction IDs.');
     ids.add(validated.id);
     return { ...validated, createdAt: record.createdAt || validated.createdAt, updatedAt: record.updatedAt || validated.updatedAt };
   });
+  return { records, currency };
 }
+export const parseImport = (text, filename) => parseBackup(text, filename).records;
 export async function saveFile(name, content, type) {
   const file = new File([content], name, { type });
   if (navigator.canShare?.({ files: [file] }) && navigator.share) {

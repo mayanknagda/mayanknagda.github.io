@@ -45,7 +45,7 @@ python -m http.server
 ```
 Then browse to [`http://localhost:8000`](http://localhost:8000).
 
-Open `/pocket-spend/`, `/gym-tracker/`, or `/habit-tracker/` to preview each app. Run their calculation tests with `node --test pocket-spend/tests.mjs gym-tracker/tests.mjs habit-tracker/tests.mjs`. Each app has its own README and in-app **How to Use** section. See [docs/apps.md](docs/apps.md) for storage, backup, and installation details.
+Open `/pocket-spend/`, `/gym-tracker/`, or `/habit-tracker/` to preview each app. Run their calculation tests with `node --test pocket-spend/tests.mjs gym-tracker/tests.mjs habit-tracker/tests.mjs`. Each app has its own README and in-app **How to Use** section. See [docs/apps.md](docs/apps.md) for everyday use, JSON backup and restore, CSV export, storage, and installation details.
 
 ## Deployment
 1. Commit changes in this repository.

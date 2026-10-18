@@ -2,7 +2,7 @@ import { validateWorkout, validateExercise, validateTemplate, validateBodyWeight
 const kinds = { workouts: validateWorkout, exercises: validateExercise, templates: validateTemplate, bodyweights: validateBodyWeight };
 const safe = value => /^[=+@\-\t\r]|^'/.test(value) ? `'${value}` : value;
 const cell = value => `"${safe(String(value ?? '')).replaceAll('"', '""')}"`;
-export function exportJSON(data) { return JSON.stringify({ format: 'gym-tracker', version: 1, exportedAt: new Date().toISOString(), data }, null, 2); }
+export function exportJSON(data, unit = 'kg') { return JSON.stringify({ format: 'gym-tracker', version: 1, exportedAt: new Date().toISOString(), unit, data }, null, 2); }
 export function exportCSV(data) {
   const rows = [['kind', 'id', 'date', 'label', 'summary', 'payload'].join(',')];
   for (const [kind, records] of Object.entries(data)) {
@@ -34,7 +34,8 @@ function csvRows(text) {
 }
 export function parseImport(text, filename) {
   let data;
-  if (/\.json$/i.test(filename)) { const backup = JSON.parse(text); if (backup.format !== 'gym-tracker' || backup.version !== 1) throw new Error('Unsupported Gym Tracker backup.'); data = backup.data; }
+  let unit = null;
+  if (/\.json$/i.test(filename)) { const backup = JSON.parse(text); if (backup.format !== 'gym-tracker' || backup.version !== 1) throw new Error('Unsupported Gym Tracker backup.'); data = backup.data; if (backup.unit != null) { if (!['kg', 'lb'].includes(backup.unit)) throw new Error('Backup has an unsupported weight unit.'); unit = backup.unit; } }
   else if (/\.csv$/i.test(filename)) { data = { workouts: [], exercises: [], templates: [], bodyweights: [] }; for (const row of csvRows(text)) { if (!kinds[row.kind]) throw new Error('Unknown CSV record type.'); data[row.kind].push(JSON.parse(row.payload)); } }
   else throw new Error('Choose a JSON or CSV backup.');
   if (!data || typeof data !== 'object') throw new Error('Backup is incomplete.');
@@ -43,7 +44,7 @@ export function parseImport(text, filename) {
     if (!Array.isArray(data[kind]) || data[kind].length > 100000) throw new Error(`Backup has invalid ${kind}.`);
     const seen = new Set(); result[kind] = data[kind].map(raw => { const record = validate(raw); if (!raw.id || seen.has(record.id)) throw new Error(`Backup has duplicate or missing ${kind} IDs.`); seen.add(record.id); return kind === 'workouts' ? { ...record, updatedAt: raw.updatedAt || record.updatedAt } : record; });
   }
-  return result;
+  return { ...result, unit };
 }
 export async function saveFile(filename, content, type) {
   const file = new File([content], filename, { type });

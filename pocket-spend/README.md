@@ -2,7 +2,7 @@
 
 Pocket Spend is a buildless, offline-first personal finance app. All records are stored in IndexedDB in the visitor's browser. The service worker caches only files under `/pocket-spend/`. No personal financial data is sent to this repository or a server.
 
-Open `/pocket-spend/` on GitHub Pages. On iPhone, use Safari's Share menu and **Add to Home Screen** after the first visit. The app works offline once its assets are cached. Browser data does not sync automatically; use **Settings > Data & Backup** to save a JSON backup regularly. CSV exports are also supported for Numbers and Excel.
+Open `/pocket-spend/` on GitHub Pages. On iPhone, use Safari's Share menu and **Add to Home Screen** after the first visit. The app works offline once its assets are cached. Browser data does not sync automatically; use **Settings > Data & Backup** to save a JSON backup regularly. New JSON backups include the currency and can be restored with **Restore JSON or CSV**. CSV exports are useful for Numbers and Excel.
 
 Settings includes a concise **How to Use** section covering entry modes, receipt reconciliation, autocomplete, tags, insights, storage, backups, and installation.
 

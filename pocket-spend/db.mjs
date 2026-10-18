@@ -30,11 +30,12 @@ export function createDatabase(name = 'pocket-spend') {
       tx.onabort = () => reject(tx.error || new Error('Storage operation was cancelled.'));
     });
   }
-  async function importTransactions(records) {
+  async function importTransactions(records, currency = null) {
     const db = await openDatabase();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction('transactions', 'readwrite');
+      const tx = db.transaction(currency ? ['transactions', 'meta'] : ['transactions'], 'readwrite');
       const store = tx.objectStore('transactions');
+      if (currency) tx.objectStore('meta').put({ key: 'currency', value: currency });
       let added = 0, duplicates = 0;
       for (const record of records) {
         const get = store.get(record.id);

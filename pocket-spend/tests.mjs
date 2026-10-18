@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cents, validateTransaction, itemTotal, receiptDifference, monthly, categoryTotals, suggestions } from './core.mjs';
-import { exportCSV, exportJSON, parseImport } from './transfer.mjs';
+import { exportCSV, exportJSON, parseBackup, parseImport } from './transfer.mjs';
 
 const expense = validateTransaction({ id: 'one', type: 'expense', amount: 1250, merchant: 'Cafe', date: '2026-10-10', category: 'Dining', tags: ['coffee'] });
 const income = validateTransaction({ id: 'two', type: 'income', amount: 50000, merchant: 'Salary', date: '2026-10-11', category: 'Work' });
@@ -35,6 +35,13 @@ test('JSON and CSV backups round trip receipt details', () => {
     assert.deepEqual(restored[2].items, receipt.items);
     assert.deepEqual(restored[2].tags, ['weekly']);
   }
+});
+test('JSON restores currency and accepts older backups without it', () => {
+  const backup = exportJSON([expense], 'EUR');
+  assert.equal(parseBackup(backup, 'backup.json').currency, 'EUR');
+  const older = JSON.parse(backup); delete older.currency;
+  assert.equal(parseBackup(JSON.stringify(older), 'backup.json').currency, null);
+  assert.throws(() => parseBackup(JSON.stringify({ ...older, currency: 'ZZZ' }), 'backup.json'));
 });
 test('import rejects invalid files and duplicate IDs', () => {
   assert.throws(() => parseImport('{"format":"other","version":1,"transactions":[]}', 'backup.json'));
