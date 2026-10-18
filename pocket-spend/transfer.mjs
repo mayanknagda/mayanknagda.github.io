@@ -1,10 +1,11 @@
-import { validateTransaction, newId, cents } from './core.mjs';
+import { validateTransaction, cents } from './core.mjs';
 
-const columns = ['id', 'type', 'date', 'merchant', 'amount', 'category', 'notes', 'tags', 'items', 'createdAt'];
+const columns = ['kind', 'id', 'type', 'date', 'merchant', 'amount', 'category', 'notes', 'tags', 'items', 'createdAt', 'updatedAt', 'currency'];
 const safeCell = value => /^[=+@\-\t\r]|^'/.test(value) ? `'${value}` : value;
 const quoted = value => `"${safeCell(String(value ?? '')).replaceAll('"', '""')}"`;
-export function exportCSV(records) {
-  return [columns.join(','), ...records.map(tx => columns.map(key => quoted(key === 'amount' ? (tx.amount / 100).toFixed(2) : key === 'tags' || key === 'items' ? JSON.stringify(tx[key]) : tx[key])).join(','))].join('\r\n');
+export function exportCSV(records, currency = 'USD') {
+  const rows = [{ kind: 'settings', currency }, ...records.map(tx => ({ ...tx, kind: 'transaction' }))];
+  return [columns.join(','), ...rows.map(tx => columns.map(key => quoted(key === 'amount' && tx.kind === 'transaction' ? (tx.amount / 100).toFixed(2) : key === 'tags' || key === 'items' ? JSON.stringify(tx[key]) : tx[key])).join(','))].join('\r\n');
 }
 export function exportJSON(records, currency = 'USD') {
   return JSON.stringify({ format: 'pocket-spend', version: 1, exportedAt: new Date().toISOString(), currency, transactions: records }, null, 2);
@@ -25,7 +26,7 @@ export function parseCSV(text) {
   if (quotedField) throw new Error('CSV has an unfinished quoted field.');
   if (field || row.length) { row.push(field.replace(/\r$/, '')); rows.push(row); }
   const headers = rows.shift()?.map((header, index) => index === 0 ? header.replace(/^\ufeff/, '') : header);
-  if (!headers || !['type', 'date', 'merchant', 'amount'].every(key => headers.includes(key))) throw new Error('CSV needs type, date, merchant, and amount columns.');
+  if (!headers || !columns.every(key => headers.includes(key))) throw new Error('This is not a complete Pocket Spend CSV backup.');
   return rows.filter(row => row.some(Boolean)).map(row => Object.fromEntries(headers.map((header, index) => {
     const value = row[index] ?? '';
     return [header, /^'(?:[=+@\-\t\r']|$)/.test(value) ? value.slice(1) : value];
@@ -42,11 +43,17 @@ export function parseBackup(text, filename) {
       currency = parsed.currency;
     }
   } else if (/\.csv$/i.test(filename)) {
-    input = parseCSV(text).map(row => ({ ...row, id: row.id || newId(), amount: cents(row.amount), tags: row.tags ? JSON.parse(row.tags) : [], items: row.items ? JSON.parse(row.items) : [] }));
+    const rows = parseCSV(text);
+    const settings = rows.filter(row => row.kind === 'settings');
+    if (settings.length !== 1 || !['USD', 'EUR', 'GBP', 'INR'].includes(settings[0].currency)) throw new Error('CSV backup needs one valid currency settings row.');
+    if (rows.some(row => !['settings', 'transaction'].includes(row.kind))) throw new Error('CSV backup has an unknown row type.');
+    currency = settings[0].currency;
+    input = rows.filter(row => row.kind === 'transaction').map(row => ({ ...row, amount: cents(row.amount), tags: row.tags ? JSON.parse(row.tags) : [], items: row.items ? JSON.parse(row.items) : [] }));
   } else throw new Error('Choose a .json or .csv file.');
   if (input.length > 100000) throw new Error('Backup is too large.');
   const ids = new Set();
   const records = input.map(record => {
+    if (!record.id) throw new Error('Backup contains a transaction without an ID.');
     const validated = validateTransaction(record);
     if (ids.has(validated.id)) throw new Error('Backup contains repeated transaction IDs.');
     ids.add(validated.id);

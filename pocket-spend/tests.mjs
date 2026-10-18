@@ -43,6 +43,14 @@ test('JSON restores currency and accepts older backups without it', () => {
   assert.equal(parseBackup(JSON.stringify(older), 'backup.json').currency, null);
   assert.throws(() => parseBackup(JSON.stringify({ ...older, currency: 'ZZZ' }), 'backup.json'));
 });
+test('CSV is a complete backup including currency, timestamps, and empty data', () => {
+  const restored = parseBackup(exportCSV([expense], 'EUR'), 'backup.csv');
+  assert.equal(restored.currency, 'EUR');
+  assert.equal(restored.records[0].createdAt, expense.createdAt);
+  assert.equal(restored.records[0].updatedAt, expense.updatedAt);
+  assert.deepEqual(parseBackup(exportCSV([], 'INR'), 'empty.csv'), { records: [], currency: 'INR' });
+  assert.throws(() => parseBackup(exportCSV([expense], 'EUR').replace('"settings"', '"other"'), 'backup.csv'));
+});
 test('import rejects invalid files and duplicate IDs', () => {
   assert.throws(() => parseImport('{"format":"other","version":1,"transactions":[]}', 'backup.json'));
   assert.throws(() => parseImport(exportJSON([expense, expense]), 'backup.json'));

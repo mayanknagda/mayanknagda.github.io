@@ -3,14 +3,15 @@ const kinds = { workouts: validateWorkout, exercises: validateExercise, template
 const safe = value => /^[=+@\-\t\r]|^'/.test(value) ? `'${value}` : value;
 const cell = value => `"${safe(String(value ?? '')).replaceAll('"', '""')}"`;
 export function exportJSON(data, unit = 'kg') { return JSON.stringify({ format: 'gym-tracker', version: 1, exportedAt: new Date().toISOString(), unit, data }, null, 2); }
-export function exportCSV(data) {
-  const rows = [['kind', 'id', 'date', 'label', 'summary', 'payload'].join(',')];
+export function exportCSV(data, unit = 'kg') {
+  const rows = [['kind', 'id', 'date', 'label', 'summary', 'unit', 'payload'].join(',')];
+  rows.push(['settings', '', '', 'Preferences', '', unit, ''].map(cell).join(','));
   for (const [kind, records] of Object.entries(data)) {
     if (!kinds[kind]) continue;
     for (const record of records) {
       const label = record.name || record.note || 'Body weight';
       const summary = kind === 'workouts' ? `${record.exercises.length} exercises; ${record.status}` : kind === 'bodyweights' ? `${record.grams / 1000} kg` : record.muscle || '';
-      rows.push([kind, record.id, record.date || '', label, summary, JSON.stringify(record)].map(cell).join(','));
+      rows.push([kind, record.id, record.date || '', label, summary, '', JSON.stringify(record)].map(cell).join(','));
     }
   }
   return rows.join('\r\n');
@@ -27,7 +28,7 @@ function csvRows(text) {
   if (quoted) throw new Error('CSV contains an unfinished quoted field.');
   if (field || row.length) { row.push(field.replace(/\r$/, '')); rows.push(row); }
   const headers = rows.shift()?.map(value => value.replace(/^\ufeff/, ''));
-  if (!headers || ['kind', 'id', 'payload'].some(value => !headers.includes(value))) throw new Error('This is not a Gym Tracker CSV export.');
+  if (!headers || ['kind', 'id', 'unit', 'payload'].some(value => !headers.includes(value))) throw new Error('This is not a complete Gym Tracker CSV backup.');
   return rows.filter(row => row.some(Boolean)).map(row => Object.fromEntries(headers.map((key, index) => {
     const value = row[index] || ''; return [key, /^'(?:[=+@\-\t\r']|$)/.test(value) ? value.slice(1) : value];
   })));
@@ -36,7 +37,18 @@ export function parseImport(text, filename) {
   let data;
   let unit = null;
   if (/\.json$/i.test(filename)) { const backup = JSON.parse(text); if (backup.format !== 'gym-tracker' || backup.version !== 1) throw new Error('Unsupported Gym Tracker backup.'); data = backup.data; if (backup.unit != null) { if (!['kg', 'lb'].includes(backup.unit)) throw new Error('Backup has an unsupported weight unit.'); unit = backup.unit; } }
-  else if (/\.csv$/i.test(filename)) { data = { workouts: [], exercises: [], templates: [], bodyweights: [] }; for (const row of csvRows(text)) { if (!kinds[row.kind]) throw new Error('Unknown CSV record type.'); data[row.kind].push(JSON.parse(row.payload)); } }
+  else if (/\.csv$/i.test(filename)) {
+    data = { workouts: [], exercises: [], templates: [], bodyweights: [] };
+    const rows = csvRows(text), settings = rows.filter(row => row.kind === 'settings');
+    if (settings.length !== 1 || !['kg', 'lb'].includes(settings[0].unit)) throw new Error('CSV backup needs one valid weight-unit settings row.');
+    unit = settings[0].unit;
+    for (const row of rows.filter(row => row.kind !== 'settings')) {
+      if (!kinds[row.kind]) throw new Error('Unknown CSV record type.');
+      const record = JSON.parse(row.payload);
+      if (!row.id || row.id !== record.id) throw new Error('CSV record ID does not match its data.');
+      data[row.kind].push(record);
+    }
+  }
   else throw new Error('Choose a JSON or CSV backup.');
   if (!data || typeof data !== 'object') throw new Error('Backup is incomplete.');
   const result = {};
