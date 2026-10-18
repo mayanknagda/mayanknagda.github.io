@@ -1,6 +1,9 @@
 export const SCHEMA_VERSION = 1;
 export const DEFAULT_CATEGORIES = ['Groceries', 'Dining', 'Transport', 'Shopping', 'Home', 'Health', 'Travel', 'Bills', 'Entertainment', 'Other'];
-export const today = () => new Date().toLocaleDateString('en-CA');
+export const today = () => {
+  const date = new Date();
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+};
 export const newId = () => globalThis.crypto?.randomUUID?.() || `ps-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
 export function cents(value) {

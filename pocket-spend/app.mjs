@@ -36,7 +36,7 @@ function renderTransactions() {
   return `${head('Transactions', 'Every entry, easy to find and change.')}<div class="toolbar"><input aria-label="Search transactions" data-filter="search" placeholder="Search merchants, items, notes..." value="${esc(f.search || '')}"><select aria-label="Type" data-filter="type"><option value="">All types</option>${['expense', 'income', 'receipt'].map(type => `<option value="${type}" ${f.type === type ? 'selected' : ''}>${type[0].toUpperCase() + type.slice(1)}</option>`).join('')}</select><select aria-label="Category" data-filter="category"><option value="">All categories</option>${categories.map(category => `<option ${f.category === category ? 'selected' : ''}>${esc(category)}</option>`).join('')}</select><select aria-label="Tag" data-filter="tag"><option value="">All tags</option>${tags.map(tag => `<option ${f.tag === tag ? 'selected' : ''}>${esc(tag)}</option>`).join('')}</select><input type="date" aria-label="From date" data-filter="from" value="${esc(f.from || '')}"><input type="date" aria-label="To date" data-filter="to" value="${esc(f.to || '')}"></div><p class="filter-summary">${records.length} ${records.length === 1 ? 'transaction' : 'transactions'}</p><section class="card"><div class="list">${records.length ? records.map(row).join('') : '<div class="empty">No transactions match these filters.</div>'}</div></section>`;
 }
 function renderInsights() {
-  const now = today().slice(0, 7), months = Array.from({ length: 6 }, (_, index) => { const d = new Date(`${now}-01T12:00:00`); d.setMonth(d.getMonth() - (5 - index)); return d.toLocaleDateString('en-CA').slice(0, 7); });
+  const now = today().slice(0, 7), months = Array.from({ length: 6 }, (_, index) => { const d = new Date(`${now}-01T12:00:00`); d.setMonth(d.getMonth() - (5 - index)); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; });
   const trends = months.map(month => [month, monthly(state.records, month).expenses]);
   const max = Math.max(1, ...trends.map(([, value]) => value));
   const allExpenses = state.records.filter(tx => tx.type !== 'income');
@@ -96,7 +96,8 @@ function openDetail(id) {
 async function doExport(format) {
   const name = `pocket-spend-${new Date().toISOString().replace(/[:.]/g, '-')}.${format}`;
   try {
-    await saveFile(name, format === 'json' ? exportJSON(state.records, state.currency) : exportCSV(state.records, state.currency), format === 'json' ? 'application/json' : 'text/csv');
+    const records = await allTransactions();
+    await saveFile(name, format === 'json' ? exportJSON(records, state.currency) : exportCSV(records, state.currency), format === 'json' ? 'application/json' : 'text/csv');
     state.lastBackup = new Date().toISOString(); state.changes = 0;
     await setMeta('lastBackup', state.lastBackup); await setMeta('changes', 0);
     render(); toast('Backup saved. Keep a copy somewhere safe.');
